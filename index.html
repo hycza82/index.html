@@ -366,20 +366,35 @@
         document.getElementById('user-input').focus();
     }
 
-    function next() {
+function next() {
         var total = data[currentTense].questions.length;
-        var userInput = document.getElementById('user-input').value.trim();
-        var correctAns = data[currentTense].questions[currentIdx].a;
+        var rawInput = document.getElementById('user-input').value.trim();
         
+        // Helper function to turn "don't" into "do not", etc.
+        function normalize(text) {
+            return text.toLowerCase()
+                .replace(/n['’]t/g, " not")
+                .replace(/['’]m/g, " am")
+                .replace(/['’]re/g, " are")
+                .replace(/['’]s/g, " is")
+                .replace(/won['’]t/g, "will not")
+                .replace(/can['’]t/g, "cannot");
+        }
+
+        var studentAns = normalize(rawInput);
+        var correctAns = normalize(data[currentTense].questions[currentIdx].a);
+        
+        var isCorrect = (studentAns === correctAns);
+
         // Track response for Review
         userAnswers.push({
             q: data[currentTense].questions[currentIdx].q,
-            user: userInput,
-            correct: correctAns,
-            isCorrect: userInput.toLowerCase() === correctAns.toLowerCase()
+            user: rawInput,
+            correct: data[currentTense].questions[currentIdx].a,
+            isCorrect: isCorrect
         });
 
-        if (userInput.toLowerCase() === correctAns.toLowerCase()) score++;
+        if (isCorrect) score++;
         currentIdx++;
         if (currentIdx < total) showQuestion(); else showResults();
     }
