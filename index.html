@@ -10,12 +10,13 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 800px; }
         
+        /* Persistent Logo Header */
         .school-header { text-align: center; margin-bottom: 30px; padding-top: 10px; display: flex; justify-content: center; }
         .school-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; display: block; }
         
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
         
-        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; }
+        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; }
         .lesson-btn .cn-text { font-size: 0.9rem; font-weight: 400; opacity: 0.9; }
 
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
@@ -23,11 +24,13 @@
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; line-height: 1.4; }
         .highlight { color: #d93025; font-weight: bold; text-decoration: underline; }
+        
+        /* Question Translation Styling */
+        .q-translation { display: block; font-size: 1rem; color: #666; font-weight: 400; margin-top: 5px; line-height: 1.4; }
         .lang-label { font-size: 0.8rem; color: #666; display: block; margin-top: 2px; }
-        .q-translation { font-size: 0.95rem; color: #777; font-weight: 400; margin-top: 8px; display: block; }
 
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
-        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
+        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
         
         .share-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -61,7 +64,7 @@
     <div id="login-card" class="card">
         <h2 style="text-align:center;">Student's Name <span class="lang-label">學生姓名</span></h2>
         <input type="text" id="student-name" placeholder="Enter your full name">
-        <button onclick="goToMenu()">Enter Classroom / 進入教室</button>
+        <button style="width:100%" onclick="goToMenu()">Enter Classroom / 進入教室</button>
     </div>
 
     <div id="menu-card" class="card" style="display:none;">
@@ -80,17 +83,17 @@
 
     <div id="rule-card" class="card" style="display:none;">
         <div id="rule-content"></div>
-        <button onclick="startQuiz()" style="background: var(--success);">Start Quiz / 開始測驗</button>
-        <button style="background:#666;" onclick="backToMenu()">Back / 返回</button>
+        <button style="width:100%; background: var(--success);" onclick="startQuiz()">Start Quiz / 開始測驗</button>
+        <button style="width:100%; background:#666; margin-top:10px;" onclick="backToMenu()">Back / 返回</button>
     </div>
 
     <div id="quiz-container" class="card" style="display:none;">
         <div id="question-area"></div>
-        <button style="background: #666; font-size: 0.8rem; padding: 10px;" onclick="toggleHint()">💡 Check Rules / 查看規則</button>
+        <button style="background: #666; font-size: 0.8rem; padding: 10px; width:100%; margin-top:20px;" onclick="toggleHint()">💡 Check Rules / 查看規則</button>
     </div>
 
     <div id="results-container" class="card" style="display:none;">
-        <h2 id="result-title">Quiz Results</h2>
+        <h2 id="result-title" style="text-align:center;">Quiz Results</h2>
         <div id="score-summary"></div>
         <div id="report-list"></div>
         <div class="no-print">
@@ -102,14 +105,14 @@
             </div>
         </div>
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-        <button class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
-        <button style="background: var(--primary);" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
-        <button style="background:#666;" class="no-print" onclick="location.reload()">Logout / 登出</button>
+        <button style="width:100%;" class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
+        <button style="width:100%; background: var(--primary); margin-top:10px;" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
+        <button style="width:100%; background:#666; margin-top:10px;" class="no-print" onclick="location.reload()">Logout / 登出</button>
     </div>
 </div>
 
 <div id="hint-modal">
-    <div class="modal-content"><div id="modal-inner"></div><button style="background: #d93025;" onclick="toggleHint()">Close / 關閉</button></div>
+    <div class="modal-content"><div id="modal-inner"></div><button style="background: #d93025; width:100%;" onclick="toggleHint()">Close / 關閉</button></div>
 </div>
 
 <script>
@@ -122,7 +125,7 @@
     var data = {
         present: {
             title: "Present Simple 現在簡單式",
-            usage: "Habits, routines, and facts. / 習慣、常態、事實。",
+            usage: "Habits and facts. / 習慣與事實。",
             questions: [
                 { q: "She ___ (eat) an apple every morning.", t: "她每天早上吃一個蘋果。", a: "eats" },
                 { q: "They ___ (not like) cold weather.", t: "他們不喜歡寒冷的天氣。", a: "do not like" },
@@ -135,11 +138,11 @@
                 { q: "It ___ (rain) a lot in April.", t: "四月常下雨。", a: "rains" },
                 { q: "Birds ___ (not fly) south in the summer.", t: "鳥類在夏天不會飛往南方。", a: "do not fly" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
         },
         past: {
             title: "Past Simple 過去簡單式",
-            usage: "Actions finished in the past. / 過去已完成的動作。",
+            usage: "Finished actions. / 過去已完成的動作。",
             questions: [
                 { q: "We ___ (visit) the museum yesterday.", t: "我們昨天參觀了博物館。", a: "visited" },
                 { q: "I ___ (not see) the movie last night.", t: "我昨晚沒看那部電影。", a: "did not see" },
@@ -152,11 +155,11 @@
                 { q: "We ___ (eat) pizza for dinner.", t: "我們晚餐吃了披薩。", a: "ate" },
                 { q: "He ___ (not lose) his keys.", t: "他沒有弄丟他的鑰匙。", a: "did not lose" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>All Subjects</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
         },
         future: {
             title: "Future Simple 未來簡單式",
-            usage: "Upcoming actions or predictions. / 將發生的動作或預測。",
+            usage: "Future plans or predictions. / 未來計畫或預測。",
             questions: [
                 { q: "I ___ (help) you with your bags.", t: "我會幫你提包包。", a: "will help" },
                 { q: "She ___ (not forget) her umbrella.", t: "她不會忘記帶傘。", a: "will not forget" },
@@ -169,7 +172,7 @@
                 { q: "The bus ___ (stop) here soon.", t: "公車很快就會停在這裡。", a: "will stop" },
                 { q: "They ___ (not play) outside if it rains.", t: "如果下雨，他們就不會在外面玩。", a: "will not play" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>All Subjects</td><td>will + Verb</td><td>will not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>will + V</td><td>will not + V</td></tr></table>`
         }
     };
 
@@ -213,10 +216,10 @@
         var item = data[currentTense].questions[currentIdx];
         document.getElementById('question-area').innerHTML = `
             <p style="text-align:center; color:#666;">Question ${currentIdx + 1} of 10</p>
-            <h3 style="text-align:center; margin: 20px 0 10px 0;">${item.q}</h3>
-            <span class="q-translation" style="text-align:center; margin-bottom: 30px;">${item.t}</span>
+            <h3 style="text-align:center; margin-bottom: 5px;">${item.q}</h3>
+            <span class="q-translation" style="text-align:center; margin-bottom: 25px;">${item.t}</span>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
-            <button onclick="next()">Submit Answer</button>`;
+            <button style="width:100%" onclick="next()">Submit Answer</button>`;
         document.getElementById('user-input').focus();
     }
 
@@ -245,16 +248,20 @@
             html += `
             <div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
                 <div class="status-icon">${isCorrect ? '✓' : '✘'}</div>
-                <div class="report-text">
-                    <strong>${q.q}</strong>
-                    <span class="q-translation" style="font-size: 0.8rem; margin-top: 2px;">${q.t}</span>
-                    ${isCorrect ? '<span>' + studentAnswers[i] + '</span>' : '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
+                <div class="report-text" style="width:100%">
+                    <strong style="display:block;">${q.q}</strong>
+                    <span class="q-translation" style="font-size: 0.85rem; margin-top:2px;">${q.t}</span>
+                    <div style="margin-top:8px;">
+                        ${isCorrect ? 
+                            '<span style="color:var(--success); font-weight:bold;">' + studentAnswers[i] + '</span>' : 
+                            '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
+                    </div>
                 </div>
             </div>`;
         }
         finalScore = score * 10;
         document.getElementById('result-title').innerText = studentName + " - " + data[currentTense].title;
-        document.getElementById('score-summary').innerHTML = `<h3 style="text-align:center; font-size: 1.5rem;">Grade: ${finalScore}% (${score}/10)</h3>`;
+        document.getElementById('score-summary').innerHTML = `<h3 style="text-align:center; font-size: 1.5rem; margin-bottom:20px;">Grade: ${finalScore}% (${score}/10)</h3>`;
         document.getElementById('report-list').innerHTML = html;
     }
 
