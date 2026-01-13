@@ -351,18 +351,25 @@
         showQuestion();
     }
 
-    function showQuestion() {
+function showQuestion() {
         var total = data[currentTense].questions.length;
         var item = data[currentTense].questions[currentIdx];
+        var tenseTitle = data[currentTense].title; // Gets the title from your data object
+
         document.getElementById('question-area').innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="status-msg">Q${currentIdx+1}/${total}</span>
-                <button class="review-rules-btn" onclick="toggleModal(true)">📖 Review Rules / 複習規則</button>
+            <div style="text-align:center; margin-bottom: 15px;">
+                <small style="color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Current Tense:</small>
+                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">${tenseTitle}</div>
             </div>
-            <h3 style="text-align:center;">${item.q}</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid #eee; pt-3; padding-top: 10px;">
+                <span class="status-msg">Q${currentIdx+1}/${total}</span>
+                <button class="review-rules-btn" onclick="toggleModal(true)">📖 Review Rules</button>
+            </div>
+            <h3 style="text-align:center; margin-top: 20px;">${item.q}</h3>
             <p style="text-align:center; color:#666;">${item.t}</p>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
             <button style="width:100%; background:var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="next()">Next / 下一題</button>`;
+        
         document.getElementById('user-input').focus();
     }
 
