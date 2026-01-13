@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrew's English | Grammar Practice</title>
+    <title>Andrew's English | Smart Grammar Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #1a73e8; --success: #38a169; --error: #e53e3e; --bg: #f8f9fa; }
@@ -22,7 +22,7 @@
         .report-row.incorrect { background: #fff5f5; border-color: var(--error); }
         .strike { text-decoration: line-through; color: var(--error); margin-right: 10px; }
         .fixed { color: var(--success); font-weight: bold; }
-        .audio-btn { width: auto; padding: 8px 15px; background: #e8f0fe; color: var(--primary); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .audio-btn { width: auto; padding: 8px 15px; background: #e8f0fe; color: var(--primary); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 20px; border:none; cursor: pointer; }
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
     </style>
 </head>
@@ -177,6 +177,7 @@
         if (currentIdx < 10) showQuestion(); else showResults();
     }
 
+    // SMART GRADING LOGIC: Makes contractions optional
     function normalize(text) {
         if (!text) return "";
         return text.toLowerCase()
@@ -187,7 +188,9 @@
                    .replace("doesn't", "does not")
                    .replace("isn't", "is not")
                    .replace("aren't", "are not")
-                   .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); // Also removes punctuation
+                   .replace("can't", "cannot")
+                   .replace("i'm", "i am")
+                   .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); // Remove punctuation
     }
 
     function showResults() {
