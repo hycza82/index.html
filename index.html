@@ -3,47 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrew's English | Smart Grammar Pro</title>
+    <title>Andrew's English | Online Classroom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #1a73e8; --success: #38a169; --error: #e53e3e; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 700px; }
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
+        
         .school-header { text-align: center; margin-bottom: 30px; }
-        .school-logo { max-width: 120px; height: auto; margin-bottom: 10px; border-radius: 8px; }
-        .school-name { color: var(--primary); margin: 0; font-size: 2.2rem; font-weight: 700; }
-        .lang-ch { display: block; color: #666; font-size: 0.9rem; font-weight: normal; margin-top: 4px; }
+        .school-logo { max-width: 180px; height: auto; margin-bottom: 15px; border-radius: 8px; }
+        .school-name { color: var(--primary); margin: 0; font-size: 2.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-ch { display: block; color: #666; font-size: 1rem; font-weight: normal; margin-top: 4px; }
+        
         .formula-box { background: #f1f3f4; padding: 20px; border-left: 5px solid var(--primary); border-radius: 4px; margin: 20px 0; font-weight: 600; }
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
-        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
+        button:hover { filter: brightness(0.9); }
+        
         .report-row { padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid; }
         .report-row.correct { background: #e6fffa; border-color: var(--success); }
         .report-row.incorrect { background: #fff5f5; border-color: var(--error); }
         .strike { text-decoration: line-through; color: var(--error); margin-right: 10px; }
         .fixed { color: var(--success); font-weight: bold; }
-        .audio-btn { width: auto; padding: 8px 15px; background: #e8f0fe; color: var(--primary); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 20px; border:none; cursor: pointer; }
+        .audio-btn { width: auto; padding: 8px 15px; background: #e8f0fe; color: var(--primary); font-size: 0.85rem; margin-bottom: 15px; border-radius: 20px; border:none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-left: auto; margin-right: auto; }
+        
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <header class="school-header no-print">
-        <img src="logo.png" alt="Logo" class="school-logo" onerror="this.style.display='none'">
+    <header class="school-header">
+        <img src="logo.png" alt="Andrew's English Logo" class="school-logo" onerror="this.style.display='none'">
         <h1 class="school-name">Andrew's English</h1>
-        <p>Online Grammar Classroom <span class="lang-ch">線上語法教室</span></p>
+        <p class="lang-ch">Online Grammar Classroom | 線上語法教室</p>
     </header>
 
     <div id="login-card" class="card">
-        <h2>Student Portal <span class="lang-ch">學生登入</span></h2>
+        <h2 style="text-align:center;">Student Portal <span class="lang-ch" style="font-size: 0.9rem;">學生登入</span></h2>
         <input type="text" id="student-name" placeholder="Enter your full name">
         <button onclick="goToMenu()">Enter Classroom / 進入教室</button>
     </div>
 
     <div id="menu-card" class="card" style="display:none;">
-        <h3 id="welcome-msg"></h3>
-        <h2>Select a Lesson <span class="lang-ch">選擇課程</span></h2>
+        <h3 id="welcome-msg" style="color: var(--primary);"></h3>
+        <h2 style="margin-top:0;">Select a Lesson <span class="lang-ch" style="font-size: 0.9rem;">選擇課程</span></h2>
         <button onclick="loadTense('present')">Present Simple / 現在簡單式</button>
         <button onclick="loadTense('past')">Past Simple / 過去簡單式</button>
         <button onclick="loadTense('future')">Future Simple / 未來簡單式</button>
@@ -52,7 +57,7 @@
     <div id="rule-card" class="card" style="display:none;">
         <div id="rule-content"></div>
         <button onclick="startQuiz()">Start Quiz / 開始測驗</button>
-        <button style="background:#666;" onclick="location.reload()">Back / 返回</button>
+        <button style="background:#666;" onclick="backToMenu()">Back to Lessons / 返回課程</button>
     </div>
 
     <div id="quiz-container" class="card" style="display:none;">
@@ -64,7 +69,8 @@
         <div id="score-summary"></div>
         <div id="report-list"></div>
         <button class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
-        <button style="background:#666;" class="no-print" onclick="location.reload()">Return to Home / 返回主頁</button>
+        <button style="background: var(--success);" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
+        <button style="background:#666;" class="no-print" onclick="location.reload()">Logout / 登出</button>
     </div>
 </div>
 
@@ -77,8 +83,8 @@
     const data = {
         present: {
             title: "Present Simple 現在簡單式",
-            rule: "Habits and facts. <span class='lang-ch'>用於習慣與事實。</span>",
-            formula: "He/She/It + Verb(-s/-es) <span class='lang-ch'>三單動詞加 s/es</span>",
+            rule: "Used for habits and general truths.",
+            formula: "He/She/It + Verb(-s/-es)",
             questions: [
                 { q: "She ___ (eat) an apple every morning.", a: "eats" },
                 { q: "They ___ (not like) cold weather.", a: "do not like" },
@@ -94,8 +100,8 @@
         },
         past: {
             title: "Past Simple 過去簡單式",
-            rule: "Finished actions. <span class='lang-ch'>已完成的動作。</span>",
-            formula: "Subject + Verb(-ed) <span class='lang-ch'>主詞 + 動詞過去式</span>",
+            rule: "Used for actions finished in the past.",
+            formula: "Subject + Verb(-ed) / Irregular Form",
             questions: [
                 { q: "We ___ (visit) the museum yesterday.", a: "visited" },
                 { q: "I ___ (not see) the movie last night.", a: "did not see" },
@@ -111,8 +117,8 @@
         },
         future: {
             title: "Future Simple 未來簡單式",
-            rule: "Upcoming actions. <span class='lang-ch'>即將發生的動作。</span>",
-            formula: "Subject + will + Verb <span class='lang-ch'>主詞 + will + 原形動詞</span>",
+            rule: "Used for actions that will happen.",
+            formula: "Subject + will + Verb",
             questions: [
                 { q: "I ___ (help) you with your bags.", a: "will help" },
                 { q: "She ___ (not forget) her umbrella.", a: "will not forget" },
@@ -129,14 +135,26 @@
     };
 
     function goToMenu() {
-        studentName = document.getElementById('student-name').value || "Guest Student";
+        studentName = document.getElementById('student-name').value.trim() || "Guest Student";
         document.getElementById('login-card').style.display = 'none';
         document.getElementById('menu-card').style.display = 'block';
         document.getElementById('welcome-msg').innerText = "Student: " + studentName;
     }
 
+    function backToMenu() {
+        // Reset quiz variables
+        currentIdx = 0;
+        studentAnswers = [];
+        // Hide all screens and show the menu
+        document.getElementById('rule-card').style.display = 'none';
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('menu-card').style.display = 'block';
+    }
+
     function loadTense(tense) {
         currentTense = tense;
+        currentIdx = 0;
+        studentAnswers = [];
         document.getElementById('menu-card').style.display = 'none';
         document.getElementById('rule-card').style.display = 'block';
         document.getElementById('rule-content').innerHTML = `
@@ -163,38 +181,37 @@
         const item = data[currentTense].questions[currentIdx];
         document.getElementById('question-area').innerHTML = `
             <button class="audio-btn" onclick="playAudio('${item.q}')">🔈 Listen / 聽讀</button>
-            <p>Question ${currentIdx + 1} of 10</p>
-            <h3>${item.q}</h3>
-            <input type="text" id="user-input" onkeypress="if(event.key==='Enter') next()">
+            <p style="text-align:center; color:#666;">Question ${currentIdx + 1} of 10</p>
+            <h3 style="text-align:center; margin: 20px 0;">${item.q}</h3>
+            <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
             <button onclick="next()">Submit Answer / 提交</button>
         `;
         document.getElementById('user-input').focus();
     }
 
     function next() {
-        studentAnswers.push(document.getElementById('user-input').value);
+        const val = document.getElementById('user-input').value;
+        studentAnswers.push(val);
         currentIdx++;
-        if (currentIdx < 10) showQuestion(); else showResults();
+        if (currentIdx < 10) {
+            showQuestion();
+        } else {
+            showResults();
+        }
     }
 
-    // SMART GRADING LOGIC: Makes contractions optional
-function normalize(text) {
-    if (!text) return "";
-    return text.toLowerCase()
-               .trim()
-               // This handles both straight ' and curly ’ apostrophes
-               .replace(/[’']/g, "'") 
-               .replace("don't", "do not")
-               .replace("didn't", "did not")
-               .replace("won't", "will not")
-               .replace("doesn't", "does not")
-               .replace("isn't", "is not")
-               .replace("aren't", "are not")
-               .replace("can't", "cannot")
-               .replace("i'm", "i am")
-               // Removes periods or question marks at the end
-               .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); 
-}
+    function normalize(text) {
+        if (!text) return "";
+        let n = text.toLowerCase().trim();
+        n = n.replace(/[’']/g, "'");
+        n = n.replace("don't", "do not")
+             .replace("doesn't", "does not")
+             .replace("didn't", "did not")
+             .replace("won't", "will not")
+             .replace("can't", "cannot")
+             .replace("i'm", "i am");
+        n = n.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        return n.replace(/\s+/g, ' ');
     }
 
     function showResults() {
@@ -208,12 +225,12 @@ function normalize(text) {
             if(isCorrect) score++;
             html += `<div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
                 <strong>${q.q}</strong><br>
-                ${isCorrect ? `✓ ${studentAnswers[i]}` : `<span class="strike">${studentAnswers[i] || "Empty"}</span> <span class="fixed">${q.a}</span>`}
+                ${isCorrect ? `✓ ${studentAnswers[i]}` : `<span class="strike">${studentAnswers[i] || "No Answer"}</span> <span class="fixed">${q.a}</span>`}
             </div>`;
         });
         
         document.getElementById('result-title').innerText = `${studentName}'s Report: ${data[currentTense].title}`;
-        document.getElementById('score-summary').innerHTML = `<h3>Grade: ${score * 10}% (${score}/10)</h3>`;
+        document.getElementById('score-summary').innerHTML = `<h3 style="text-align:center; font-size: 1.5rem;">Grade: ${score * 10}% (${score}/10)</h3>`;
         document.getElementById('report-list').innerHTML = html;
     }
 </script>
