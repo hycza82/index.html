@@ -7,39 +7,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --fb: #1877F2; --bg: #f8f9fa; --v3: #e65100; }
+        :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --fb: #1877F2; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 850px; position: relative; padding-bottom: 80px; }
+        
         .school-header { text-align: center; margin-bottom: 20px; display: flex; justify-content: center; }
         .school-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; }
+        
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; position: relative; }
+        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 650px) { .menu-grid { grid-template-columns: 1fr; } }
-        .lesson-btn { text-align: center; padding: 20px; width: 100%; border: none; background-color: #1a73e8; color: #ffffff !important; cursor: pointer; border-radius: 12px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        .lesson-btn { 
+            text-align: center; padding: 20px; width: 100%; border: none; 
+            background-color: #1a73e8; color: #ffffff !important; 
+            cursor: pointer; border-radius: 12px; transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
         .lesson-btn:hover { background-color: #1557b0; transform: translateY(-2px); }
         .btn-en { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .btn-cn { font-size: 0.9rem; font-weight: 400; display: block; opacity: 0.9; }
-        .home-btn { position: fixed; bottom: 20px; left: 20px; background: #444; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        .home-btn { 
+            position: fixed; bottom: 20px; left: 20px; 
+            background: #444; color: white; border: none; 
+            padding: 12px 20px; border-radius: 30px; 
+            font-weight: bold; cursor: pointer; z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; }
+        
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
         .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; display: block; color: var(--primary); }
+
+        /* Social, Modal & Save */
         .share-container { display: flex; gap: 10px; margin: 15px 0; }
         .share-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-line { background-color: var(--line); }
         .btn-fb { background-color: var(--fb); }
         .btn-save { background-color: #ff9800; width: 100%; margin-bottom: 10px; padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
         .btn-logout { background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-top: 10px; }
+
+        /* Review Styles */
         .review-item { border-bottom: 1px solid #eee; padding: 15px 0; text-align: left; }
         .review-q { font-weight: 600; color: #333; margin-bottom: 5px; }
         .correct-ans { color: var(--success); font-weight: bold; }
         .wrong-ans { color: var(--error); text-decoration: line-through; margin-right: 10px; }
+
         #rules-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: white; margin: 10% auto; padding: 30px; width: 90%; max-width: 650px; border-radius: 16px; position: relative; max-height: 80vh; overflow-y: auto; }
         .close-modal { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
-        .review-rules-btn { background: #f1f3f4; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;}
+        .review-rules-btn { background: #f1f3f4; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -73,9 +96,6 @@
             <button class="lesson-btn" onclick="loadTense('presentContinuous')"><span class="btn-en">Present Continuous</span><span class="btn-cn">現在進行式</span></button>
             <button class="lesson-btn" onclick="loadTense('pastContinuous')"><span class="btn-en">Past Continuous</span><span class="btn-cn">過去進行式</span></button>
             <button class="lesson-btn" onclick="loadTense('futureContinuous')"><span class="btn-en">Future Continuous</span><span class="btn-cn">未來進行式</span></button>
-            <button class="lesson-btn" onclick="loadTense('presentPerfect')"><span class="btn-en">Present Perfect</span><span class="btn-cn">現在完成式</span></button>
-            <button class="lesson-btn" onclick="loadTense('pastPerfect')"><span class="btn-en">Past Perfect</span><span class="btn-cn">過去完成式</span></button>
-            <button class="lesson-btn" onclick="loadTense('futurePerfect')"><span class="btn-en">Future Perfect</span><span class="btn-cn">未來完成式</span></button>
         </div>
     </div>
 
@@ -95,22 +115,27 @@
             <h2 style="text-align:center;">Andrew's English | Report Card</h2>
             <div id="score-summary" style="text-align:center; font-size: 1.2rem; margin: 20px 0; font-weight: bold; color: var(--primary); border: 2px dashed #ddd; padding: 20px;"></div>
         </div>
+        
         <button class="btn-save" onclick="saveAsJpeg()">📸 Save Test Result (JPEG) / 儲存照片</button>
+
         <div class="share-container">
             <button class="share-btn btn-line" onclick="shareResult('line')">LINE 分享</button>
             <button class="share-btn btn-fb" onclick="shareResult('fb')">Facebook</button>
         </div>
+
         <div id="answer-review" style="margin-top: 30px;">
             <h3 style="border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Detailed Review / 考題複習</h3>
             <div id="review-list"></div>
         </div>
+
         <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top: 20px;" onclick="backToMenu()">Try Another Lesson</button>
+        <button class="home-btn" onclick="backToMenu()">🏠 Back to Home</button>
     </div>
 </div>
 
 <script>
     var studentName = "", currentTense = "", currentIdx = 0, score = 0;
-    var userAnswers = [];
+    var userAnswers = []; // Added to track answers for review
 
     var data = {
         presentSimple: {
@@ -223,8 +248,8 @@
         },
         pastContinuous: {
             title: "Past Continuous 過去進行式",
-            usage: "Actions in progress in the past.",
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Structure</th></tr><tr><td>I/He/She/It</td><td>was (not) + V-ing</td></tr><tr><td>You/We/They</td><td>were (not) + V-ing</td></tr></table>`,
+            usage: "Actions in progress in the past. / 過去正在進行的動作。",
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Structure</th></tr><tr><td>I/He/She/It</td><td>was (not) + verb-ing</td></tr><tr><td>You/We/They</td><td>were (not) + verb-ing</td></tr></table>`,
             questions: [
                 {q: "I ___ (eat) dinner at 7 PM.", t: "我七點時正在吃晚餐。", a: "was eating"},
                 {q: "They ___ (not study) yesterday.", t: "他們昨天那時沒在學習。", a: "were not studying"},
@@ -235,13 +260,23 @@
                 {q: "It ___ (snow) last night.", t: "昨晚那時在下雪。", a: "was snowing"},
                 {q: "I ___ (not feel) well.", t: "我那時感覺不舒服。", a: "was not feeling"},
                 {q: "They ___ (work) hard.", t: "他們那時在努力工作。", a: "were working"},
-                {q: "The sun ___ (shine).", t: "那時陽光普照。", a: "was shining"}
+                {q: "The sun ___ (shine).", t: "那時陽光普照。", a: "was shining"},
+                {q: "I ___ (not look).", t: "我那時沒在看。", a: "was not looking"},
+                {q: "We ___ (have) fun.", t: "我們那時玩得很開心。", a: "were having"},
+                {q: "He ___ (talk) to her.", t: "他那時在跟她說話。", a: "was talking"},
+                {q: "They ___ (not wait).", t: "他們那時沒在等。", a: "were not waiting"},
+                {q: "She ___ (clean).", t: "她那時在打掃。", a: "was cleaning"},
+                {q: "You ___ (not help).", t: "你那時沒在幫忙。", a: "were not helping"},
+                {q: "It ___ (rain).", t: "那時在下雨。", a: "was raining"},
+                {q: "We ___ (study).", t: "我們那時在讀書。", a: "were studying"},
+                {q: "He ___ (not wear) a hat.", t: "他那時沒戴帽子。", a: "was not wearing"},
+                {q: "I ___ (wait) for you.", t: "我那時在等你。", a: "was waiting"}
             ]
         },
         futureContinuous: {
             title: "Future Continuous 未來進行式",
-            usage: "Actions that will be in progress in the future.",
-            table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative (+)</td><td>will be + V-ing</td></tr><tr><td>Negative (-)</td><td>will not be + V-ing</td></tr></table>`,
+            usage: "Actions that will be in progress. / 未來某時正在進行的動作。",
+            table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative (+)</td><td>will be + verb-ing</td></tr><tr><td>Negative (-)</td><td>will not be + verb-ing</td></tr></table>`,
             questions: [
                 {q: "I ___ (wait) for you.", t: "我到時會正在等你。", a: "will be waiting"},
                 {q: "They ___ (not work) tomorrow.", t: "他們明天到時將不在工作。", a: "will not be working"},
@@ -252,58 +287,17 @@
                 {q: "It ___ (rain) later.", t: "等下將會正在下雨。", a: "will be raining"},
                 {q: "I ___ (not use) the laptop.", t: "我到時將不在用筆電。", a: "will not be using"},
                 {q: "They ___ (swim) in the sea.", t: "他們到時將在海裡游泳。", a: "will be swimming"},
-                {q: "She ___ (wear) a red dress.", t: "她到時將穿著紅裙子。", a: "will be wearing"}
-            ]
-        },
-        presentPerfect: {
-            title: "Present Perfect 現在完成式",
-            usage: "Experience or actions starting in past continuing to now.",
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Structure</th></tr><tr><td>I/You/We/They</td><td>have (not) + V3</td></tr><tr><td>He/She/It</td><td>has (not) + V3</td></tr></table>`,
-            questions: [
-                {q: "I ___ (see) that movie three times.", t: "這部電影我已經看過三次了。", a: "have seen"},
-                {q: "She ___ (not finish) her homework yet.", t: "她還沒完成作業。", a: "has not finished"},
-                {q: "They ___ (live) here for ten years.", t: "他們在這邊住了十年了。", a: "have lived"},
-                {q: "He ___ (lose) his passport.", t: "他弄丟了他的護照。", a: "has lost"},
-                {q: "We ___ (not eat) dinner yet.", t: "我們還沒吃晚餐。", a: "have not eaten"},
-                {q: "Have you ever ___ (be) to Paris?", t: "你曾去過巴黎嗎？", a: "been"},
-                {q: "The rain ___ (stop) finally.", t: "雨終於停了。", a: "has stopped"},
-                {q: "I ___ (not meet) him before.", t: "我以前沒見過他。", a: "have not met"},
-                {q: "She ___ (write) five books.", t: "她已經寫了五本書。", a: "has written"},
-                {q: "We ___ (buy) a new car.", t: "我們買了一輛新車。", a: "have bought"}
-            ]
-        },
-        pastPerfect: {
-            title: "Past Perfect 過去完成式",
-            usage: "An action completed before another past action.",
-            table: `<table class="rule-table"><tr><th>All Subjects</th><th>had + V3</th></tr></table>`,
-            questions: [
-                {q: "The train ___ (leave) when I arrived.", t: "當我到達時，火車已經開走了。", a: "had left"},
-                {q: "She ___ (not study) before the test.", t: "她在考試前沒有唸書。", a: "had not studied"},
-                {q: "They realized they ___ (make) a mistake.", t: "他們意識到他們犯了一個錯誤。", a: "had made"},
-                {q: "I ___ (finish) work before 6 PM.", t: "我在下午六點前就完成了工作。", a: "had finished"},
-                {q: "He told me he ___ (see) her before.", t: "他告訴我他以前見過她。", a: "had seen"},
-                {q: "The lights ___ (go) out before we sat down.", t: "我們坐下前燈就熄滅了。", a: "had gone"},
-                {q: "I ___ (not eat) anything all day.", t: "我整天都還沒吃東西。", a: "had not eaten"},
-                {q: "She ___ (live) in London before moving here.", t: "搬來這之前她住在倫敦。", a: "had lived"},
-                {q: "By the time he called, I ___ (sleep).", t: "他打來時，我已經睡著了。", a: "had slept"},
-                {q: "They ___ (not hear) the news yet.", t: "他們當時還沒聽到那個消息。", a: "had not heard"}
-            ]
-        },
-        futurePerfect: {
-            title: "Future Perfect 未來完成式",
-            usage: "An action that will be completed by a certain future time.",
-            table: `<table class="rule-table"><tr><th>All Subjects</th><th>will have + V3</th></tr></table>`,
-            questions: [
-                {q: "I ___ (finish) by tomorrow.", t: "我明天之前會完成。", a: "will have finished"},
-                {q: "They ___ (leave) by the time you arrive.", t: "你到的時候他們應該已經離開了。", a: "will have left"},
-                {q: "She ___ (not graduate) by next year.", t: "到明年她還不會畢業。", a: "will not have graduated"},
-                {q: "We ___ (save) enough money by July.", t: "到七月我們就會存夠錢了。", a: "will have saved"},
-                {q: "He ___ (read) the whole book by tonight.", t: "到今晚他就會讀完整本書了。", a: "will have read"},
-                {q: "The sun ___ (set) by 7 PM.", t: "太陽在晚上七點前會下山。", a: "will have set"},
-                {q: "I ___ (work) here for 5 years this May.", t: "到今年五月我就在這裡工作滿五年了。", a: "will have worked"},
-                {q: "They ___ (not build) the bridge by 2027.", t: "到2027年他們還不會蓋好這座橋。", a: "will not have built"},
-                {q: "By next week, we ___ (be) married for a month.", t: "到下週，我們就結婚滿一個月了。", a: "will have been"},
-                {q: "She ___ (clean) the house before you return.", t: "在你回來前她會把房子打掃好。", a: "will have cleaned"}
+                {q: "She ___ (wear) a red dress.", t: "她到時將穿著紅裙子。", a: "will be wearing"},
+                {q: "I ___ (drive).", t: "我那時會正在開車。", a: "will be driving"},
+                {q: "We ___ (not dance).", t: "我們那時不會正在跳舞。", a: "will not be dancing"},
+                {q: "He ___ (meet) her.", t: "他到時會正跟她見面。", a: "will be meeting"},
+                {q: "You ___ (not stay).", t: "你到時不會待在那。", a: "will not be staying"},
+                {q: "They ___ (play) soccer.", t: "他們到時會正踢足球。", a: "will be playing"},
+                {q: "It ___ (snow).", t: "那時會正在下雪。", a: "will be snowing"},
+                {q: "I ___ (not cry).", t: "我那時不會正在哭。", a: "will not be crying"},
+                {q: "She ___ (watch) TV.", t: "她到時會正在看電視。", a: "will be watching"},
+                {q: "We ___ (walk) home.", t: "我們那時會正走路回家。", a: "will be walking"},
+                {q: "He ___ (work) hard.", t: "他那時會正在努力工作。", a: "will be working"}
             ]
         }
     };
@@ -320,43 +314,6 @@
         }
     }
 
-    function toggleV3Modal(show) {
-        let body = document.getElementById('modal-body');
-        if (show) {
-            body.innerHTML = `
-                <h2 style="color:var(--v3);">Common V3 Verbs / 常用不規則動詞表</h2>
-                <table class="rule-table">
-                    <tr><th>V1 (Base)</th><th>V2 (Past)</th><th>V3 (Participle)</th></tr>
-                    <tr><td>Be</td><td>was/were</td><td><strong>been</strong></td></tr>
-                    <tr><td>Eat</td><td>ate</td><td><strong>eaten</strong></td></tr>
-                    <tr><td>Go</td><td>went</td><td><strong>gone</strong></td></tr>
-                    <tr><td>See</td><td>saw</td><td><strong>seen</strong></td></tr>
-                    <tr><td>Write</td><td>wrote</td><td><strong>written</strong></td></tr>
-                    <tr><td>Do</td><td>did</td><td><strong>done</strong></td></tr>
-                    <tr><td>Have</td><td>had</td><td><strong>had</strong></td></tr>
-                    <tr><td>Make</td><td>made</td><td><strong>made</strong></td></tr>
-                    <tr><td>Meet</td><td>met</td><td><strong>met</strong></td></tr>
-                    <tr><td>Win</td><td>won</td><td><strong>won</strong></td></tr>
-                </table>
-                <p><small>*Regular verbs just add -ed.</small></p>`;
-            document.getElementById('rules-modal').style.display = "block";
-        } else {
-            document.getElementById('rules-modal').style.display = "none";
-        }
-    }
-
-    function normalize(text) {
-        return text.toLowerCase().trim()
-            .replace(/n['’]t/g, " not")
-            .replace(/['’]m/g, " am")
-            .replace(/['’]re/g, " are")
-            .replace(/['’]s/g, " is")
-            .replace(/['’]ve/g, " have")
-            .replace(/['’]ll/g, " will")
-            .replace(/won['’]t/g, "will not")
-            .replace(/can['’]t/g, "cannot");
-    }
-
     function goToMenu() {
         var input = document.getElementById('student-name');
         if (input.value.trim() === "") return;
@@ -366,6 +323,7 @@
         document.getElementById('welcome-msg').innerText = "Welcome, " + studentName + "!";
     }
 
+    // New Logout Function
     function logout() {
         studentName = "";
         document.getElementById('student-name').value = "";
@@ -393,35 +351,49 @@
         showQuestion();
     }
 
-    function showQuestion() {
+function showQuestion() {
         var total = data[currentTense].questions.length;
         var item = data[currentTense].questions[currentIdx];
-        var tenseTitle = data[currentTense].title;
+        var tenseTitle = data[currentTense].title; // Gets the title from your data object
 
         document.getElementById('question-area').innerHTML = `
-            <div style="text-align:center; margin-bottom: 10px;">
-                <div style="color: var(--primary); font-weight: bold; font-size: 1.1rem;">${tenseTitle}</div>
+            <div style="text-align:center; margin-bottom: 15px;">
+                <small style="color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Current Tense:</small>
+                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">${tenseTitle}</div>
             </div>
-            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:5px; margin-bottom:15px;">
-                <button class="review-rules-btn" onclick="toggleModal(true)">📖 Grammar Rules</button>
-                <button class="review-rules-btn" style="background:#fff3e0; color:#e65100; border-color:#e65100;" onclick="toggleV3Modal(true)">💡 V3 List</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid #eee; pt-3; padding-top: 10px;">
+                <span class="status-msg">Q${currentIdx+1}/${total}</span>
+                <button class="review-rules-btn" onclick="toggleModal(true)">📖 Review Rules</button>
             </div>
-            <span class="status-msg">Question ${currentIdx+1} of ${total}</span>
-            <h3 style="text-align:center; margin: 15px 0;">${item.q}</h3>
+            <h3 style="text-align:center; margin-top: 20px;">${item.q}</h3>
             <p style="text-align:center; color:#666;">${item.t}</p>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
             <button style="width:100%; background:var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="next()">Next / 下一題</button>`;
+        
         document.getElementById('user-input').focus();
     }
 
-    function next() {
+function next() {
         var total = data[currentTense].questions.length;
-        var rawInput = document.getElementById('user-input').value;
+        var rawInput = document.getElementById('user-input').value.trim();
+        
+        // Helper function to turn "don't" into "do not", etc.
+        function normalize(text) {
+            return text.toLowerCase()
+                .replace(/n['’]t/g, " not")
+                .replace(/['’]m/g, " am")
+                .replace(/['’]re/g, " are")
+                .replace(/['’]s/g, " is")
+                .replace(/won['’]t/g, "will not")
+                .replace(/can['’]t/g, "cannot");
+        }
+
         var studentAns = normalize(rawInput);
         var correctAns = normalize(data[currentTense].questions[currentIdx].a);
         
         var isCorrect = (studentAns === correctAns);
 
+        // Track response for Review
         userAnswers.push({
             q: data[currentTense].questions[currentIdx].q,
             user: rawInput,
@@ -440,30 +412,32 @@
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
         
+        // Report Summary
         document.getElementById('score-summary').innerHTML = `
-            <p>Student: ${studentName}</p>
-            <p>Lesson: ${data[currentTense].title}</p>
+            <p style="margin:5px 0;">Student: ${studentName}</p>
+            <p style="margin:5px 0;">Lesson: ${data[currentTense].title}</p>
             <p style="font-size:3rem; margin:10px 0;">${finalPct}%</p>
-            <p>${score} / ${total} Correct</p>
         `;
 
+        // Generate Detailed Review List
         let reviewHtml = "";
         userAnswers.forEach((item, index) => {
             reviewHtml += `
                 <div class="review-item">
                     <div class="review-q">Q${index + 1}: ${item.q}</div>
-                    Your Answer: <span class="${item.isCorrect ? 'correct-ans' : 'wrong-ans'}">${item.user || "(Empty)"}</span>
-                    ${!item.isCorrect ? `<br>Correct: <span class="correct-ans">${item.correct}</span>` : ' ✓'}
+                    Your Answer: <span class="${item.isCorrect ? 'correct-ans' : 'wrong-ans'}">${item.user || "(No answer)"}</span>
+                    ${!item.isCorrect ? `<br>Correct Answer: <span class="correct-ans">${item.correct}</span>` : ' (Correct!)'}
                 </div>`;
         });
         document.getElementById('review-list').innerHTML = reviewHtml;
     }
 
+    // New JPEG Save Function
     function saveAsJpeg() {
         const target = document.getElementById('capture-area');
         html2canvas(target).then(canvas => {
             const link = document.createElement('a');
-            link.download = `${studentName}_Report.jpg`;
+            link.download = `${studentName}_English_Test.jpg`;
             link.href = canvas.toDataURL('image/jpeg', 0.9);
             link.click();
         });
@@ -472,10 +446,13 @@
     function shareResult(platform) {
         const total = data[currentTense].questions.length;
         const finalPct = Math.round((score / total) * 100);
-        const text = `I scored ${finalPct}% on my English quiz!`;
+        const text = `I scored ${finalPct}% on the ${data[currentTense].title} quiz!`;
         const url = window.location.href;
-        if (platform === 'line') window.open(`https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text + " " + url)}`);
-        else if (platform === 'fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        if (platform === 'line') {
+            window.open(`https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text + " " + url)}`);
+        } else if (platform === 'fb') {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        }
     }
 </script>
 </body>
