@@ -6,17 +6,29 @@
     <title>Andrew's English | Online Classroom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --bg: #f8f9fa; }
+        :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --fb: #1877F2; --wa: #25D366; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 800px; }
         
-        /* Centered Logo Styling */
-        .school-header { text-align: center; margin-bottom: 30px; padding-top: 20px; }
-        .school-logo { max-width: 320px; max-height: 150px; width: auto; height: auto; }
+        /* Persistent Logo Header */
+        .school-header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .school-logo { 
+            max-width: 300px; /* Adjust size here */
+            max-height: 120px; 
+            width: auto;
+            height: auto;
+            display: block;
+        }
         
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
         
-        /* Rule Tables */
+        /* Table & Quiz UI */
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
@@ -28,13 +40,17 @@
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
         
-        .btn-line { background: var(--line); margin-top: 10px; }
+        /* Social Media Buttons */
+        .share-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-line { background: var(--line); }
+        .btn-fb { background: var(--fb); }
+        .btn-wa { background: var(--wa); }
 
-        /* Results Display */
+        /* Score Report Logic */
         .report-row { padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 15px; }
         .report-row.correct { background: #e6fffa; border-left: 10px solid var(--success); }
         .report-row.incorrect { background: #fff5f5; border-left: 10px solid var(--error); }
-        .status-icon { font-size: 1.5rem; font-weight: bold; }
+        .status-icon { font-size: 1.5rem; font-weight: bold; line-height: 1; }
         .correct .status-icon { color: var(--success); }
         .incorrect .status-icon { color: var(--error); }
         .strike { text-decoration: line-through; color: #a0aec0; margin-right: 10px; }
@@ -42,14 +58,16 @@
         
         #hint-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); overflow: auto; }
         .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 12px; width: 90%; max-width: 700px; }
+        
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
+        @media (max-width: 600px) { .share-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <header class="school-header">
-        <img src="logo.png" alt="Andrew's English Logo" class="school-logo">
+        <img src="logo.png" alt="Andrew's English" class="school-logo">
     </header>
 
     <div id="login-card" class="card">
@@ -82,9 +100,16 @@
         <div id="score-summary"></div>
         <div id="report-list"></div>
         
-        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-        <button class="btn-line no-print" onclick="shareToLine()">Share Score to LINE / 分享分數到 LINE</button>
+        <div class="no-print">
+            <p style="text-align:center; font-weight:bold; margin-top:20px;">Share Your Score! / 分享你的分數！</p>
+            <div class="share-container">
+                <button class="btn-line" onclick="shareToSocial('line')">LINE</button>
+                <button class="btn-fb" onclick="shareToSocial('facebook')">Facebook</button>
+                <button class="btn-wa" onclick="shareToSocial('whatsapp')">WhatsApp</button>
+            </div>
+        </div>
         
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
         <button class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
         <button style="background: var(--primary);" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
         <button style="background:#666;" class="no-print" onclick="location.reload()">Logout / 登出</button>
@@ -108,12 +133,7 @@
     var data = {
         present: {
             title: "Present Simple 現在簡單式",
-            usage: "Habits, routines, and facts.<br><span class='lang-label'>習慣、常態、事實。</span>",
-            table: `<table class="rule-table">
-                <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>I / You / We / They</td><td>Base Verb</td><td><b>do not</b> + Verb</td></tr>
-                <tr><td>He / She / It</td><td>Verb + <span class="highlight">s/es</span></td><td><b>does not</b> + Verb</td></tr>
-            </table>`,
+            usage: "Habits, routines, and facts.",
             questions: [
                 { q: "She ___ (eat) an apple every morning.", a: "eats" },
                 { q: "They ___ (not like) cold weather.", a: "do not like" },
@@ -125,16 +145,12 @@
                 { q: "You ___ (not speak) Spanish fluently.", a: "do not speak" },
                 { q: "It ___ (rain) a lot in April.", a: "rains" },
                 { q: "Birds ___ (not fly) south in the summer.", a: "do not fly" }
-            ]
+            ],
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
         },
         past: {
             title: "Past Simple 過去簡單式",
-            usage: "Actions finished in the past.<br><span class='lang-label'>過去已完成的動作。</span>",
-            table: `<table class="rule-table">
-                <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td>Verb + <span class="highlight">ed</span></td><td><b>did not</b> + Verb</td></tr>
-                <tr><td>Irregulars</td><td>Change form</td><td><b>did not</b> + Verb</td></tr>
-            </table>`,
+            usage: "Actions finished in the past.",
             questions: [
                 { q: "We ___ (visit) the museum yesterday.", a: "visited" },
                 { q: "I ___ (not see) the movie last night.", a: "did not see" },
@@ -146,15 +162,12 @@
                 { q: "It ___ (not snow) last winter.", a: "did not snow" },
                 { q: "We ___ (eat) pizza for dinner.", a: "ate" },
                 { q: "He ___ (not lose) his keys.", a: "did not lose" }
-            ]
+            ],
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
         },
         future: {
             title: "Future Simple 未來簡單式",
-            usage: "Upcoming actions or predictions.<br><span class='lang-label'>將發生的動作或預測。</span>",
-            table: `<table class="rule-table">
-                <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td><b>will</b> + Verb</td><td><b>will not</b> + Verb</td></tr>
-            </table>`,
+            usage: "Upcoming actions or predictions.",
             questions: [
                 { q: "I ___ (help) you with your bags.", a: "will help" },
                 { q: "She ___ (not forget) her umbrella.", a: "will not forget" },
@@ -166,7 +179,8 @@
                 { q: "I ___ (not wear) a coat today.", a: "will not wear" },
                 { q: "The bus ___ (stop) here soon.", a: "will stop" },
                 { q: "They ___ (not play) outside if it rains.", a: "will not play" }
-            ]
+            ],
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>will + Verb</td><td>will not + V</td></tr></table>`
         }
     };
 
@@ -188,7 +202,7 @@
 
     function loadTense(tense) {
         currentTense = tense;
-        var guideHtml = `<h2 style="color:var(--primary); text-align:center;">${data[tense].title}</h2><div class="usage-box"><strong>Usage (用法):</strong><br>${data[tense].usage}</div>${data[tense].table}`;
+        var guideHtml = `<h2 style="color:var(--primary); text-align:center;">${data[tense].title}</h2><div class="usage-box"><strong>Usage:</strong> ${data[tense].usage}</div>${data[tense].table}`;
         document.getElementById('rule-content').innerHTML = guideHtml;
         document.getElementById('modal-inner').innerHTML = guideHtml;
         document.getElementById('menu-card').style.display = 'none';
@@ -243,9 +257,7 @@
                 <div class="status-icon">${isCorrect ? '✓' : '✘'}</div>
                 <div class="report-text">
                     <strong>${q.q}</strong><br>
-                    ${isCorrect ? 
-                        '<span>' + studentAnswers[i] + '</span>' : 
-                        '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
+                    ${isCorrect ? '<span>' + studentAnswers[i] + '</span>' : '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
                 </div>
             </div>`;
         }
@@ -255,10 +267,17 @@
         document.getElementById('report-list').innerHTML = html;
     }
 
-    function shareToLine() {
-        var text = studentName + " just scored " + finalScore + "% in " + data[currentTense].title + " at Andrew's English Classroom!";
-        var lineUrl = "https://line.me/R/msg/text/?" + encodeURIComponent(text);
-        window.open(lineUrl, '_blank');
+    function shareToSocial(platform) {
+        var msg = studentName + " scored " + finalScore + "% in " + data[currentTense].title + "!";
+        var url = window.location.href;
+        
+        if(platform === 'line') {
+            window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg + " " + url), '_blank');
+        } else if(platform === 'facebook') {
+            window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(msg), '_blank');
+        } else if(platform === 'whatsapp') {
+            window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg + " " + url), '_blank');
+        }
     }
 </script>
 </body>
