@@ -6,30 +6,42 @@
     <title>Andrew's English | Online Classroom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --success: #38a169; --error: #e53e3e; --bg: #f8f9fa; }
+        :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 800px; }
+        
+        /* Centered Logo Styling */
+        .school-header { text-align: center; margin-bottom: 30px; padding-top: 20px; }
+        .school-logo { max-width: 320px; max-height: 150px; width: auto; height: auto; }
+        
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
-        .school-header { text-align: center; margin-bottom: 30px; }
-        .school-logo { max-width: 180px; height: auto; margin-bottom: 15px; border-radius: 8px; }
-        .school-name { color: var(--primary); margin: 0; font-size: 2.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Rule Tables */
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; line-height: 1.4; }
-        .highlight { color: var(--error); font-weight: bold; text-decoration: underline; }
-        .example-sent { display: block; margin-top: 5px; color: #444; font-style: italic; }
+        .highlight { color: #d93025; font-weight: bold; text-decoration: underline; }
         .lang-label { font-size: 0.8rem; color: #666; display: block; margin-top: 2px; }
+
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
+        
+        .btn-line { background: var(--line); margin-top: 10px; }
+
+        /* Results Display */
+        .report-row { padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 15px; }
+        .report-row.correct { background: #e6fffa; border-left: 10px solid var(--success); }
+        .report-row.incorrect { background: #fff5f5; border-left: 10px solid var(--error); }
+        .status-icon { font-size: 1.5rem; font-weight: bold; }
+        .correct .status-icon { color: var(--success); }
+        .incorrect .status-icon { color: var(--error); }
+        .strike { text-decoration: line-through; color: #a0aec0; margin-right: 10px; }
+        .fixed { font-weight: bold; color: #2d3748; display: block; margin-top: 5px; background: rgba(255,255,255,0.5); padding: 4px; border-radius: 4px; }
+        
         #hint-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); overflow: auto; }
         .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 12px; width: 90%; max-width: 700px; }
-        .report-row { padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid; }
-        .report-row.correct { background: #e6fffa; border-color: var(--success); }
-        .report-row.incorrect { background: #fff5f5; border-color: var(--error); }
-        .strike { text-decoration: line-through; color: var(--error); margin-right: 10px; }
-        .fixed { color: var(--success); font-weight: bold; }
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
     </style>
 </head>
@@ -37,14 +49,13 @@
 
 <div class="app-container">
     <header class="school-header">
-        <img src="logo.png" alt="Andrew's English Logo" class="school-logo" onerror="this.style.display='none'">
-        <h1 class="school-name">Andrew's English</h1>
+        <img src="logo.png" alt="Andrew's English Logo" class="school-logo">
     </header>
 
     <div id="login-card" class="card">
-        <h2 style="text-align:center;">Student Portal <span class="lang-label">學生登入</span></h2>
+        <h2 style="text-align:center;">Student's Name <span class="lang-label">學生姓名</span></h2>
         <input type="text" id="student-name" placeholder="Enter your full name">
-        <button id="login-btn" onclick="goToMenu()">Enter Classroom / 進入教室</button>
+        <button onclick="goToMenu()">Enter Classroom / 進入教室</button>
     </div>
 
     <div id="menu-card" class="card" style="display:none;">
@@ -70,6 +81,10 @@
         <h2 id="result-title">Quiz Results</h2>
         <div id="score-summary"></div>
         <div id="report-list"></div>
+        
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        <button class="btn-line no-print" onclick="shareToLine()">Share Score to LINE / 分享分數到 LINE</button>
+        
         <button class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
         <button style="background: var(--primary);" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
         <button style="background:#666;" class="no-print" onclick="location.reload()">Logout / 登出</button>
@@ -79,7 +94,7 @@
 <div id="hint-modal">
     <div class="modal-content">
         <div id="modal-inner"></div>
-        <button style="background: var(--error);" onclick="toggleHint()">Close Rules / 關閉</button>
+        <button style="background: #d93025;" onclick="toggleHint()">Close / 關閉</button>
     </div>
 </div>
 
@@ -88,6 +103,7 @@
     var currentTense = "";
     var currentIdx = 0;
     var studentAnswers = [];
+    var finalScore = 0;
     
     var data = {
         present: {
@@ -95,8 +111,8 @@
             usage: "Habits, routines, and facts.<br><span class='lang-label'>習慣、常態、事實。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>I / You / We / They</td><td>Base Verb<span class="example-sent">I <span class="highlight">eat</span> apples.</span></td><td><b>do not</b> + Verb<span class="example-sent">They <span class="highlight">do not eat</span>.</span></td></tr>
-                <tr><td>He / She / It</td><td>Verb + <span class="highlight">s/es</span><span class="example-sent">He <span class="highlight">eats</span> apples.</span></td><td><b>does not</b> + Verb<span class="example-sent">She <span class="highlight">does not eat</span>.</span></td></tr>
+                <tr><td>I / You / We / They</td><td>Base Verb</td><td><b>do not</b> + Verb</td></tr>
+                <tr><td>He / She / It</td><td>Verb + <span class="highlight">s/es</span></td><td><b>does not</b> + Verb</td></tr>
             </table>`,
             questions: [
                 { q: "She ___ (eat) an apple every morning.", a: "eats" },
@@ -116,8 +132,8 @@
             usage: "Actions finished in the past.<br><span class='lang-label'>過去已完成的動作。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td>Verb + <span class="highlight">ed</span><span class="example-sent">I <span class="highlight">talked</span> to him.</span></td><td><b>did not</b> + Verb<span class="example-sent">I <span class="highlight">did not talk</span>.</span></td></tr>
-                <tr><td>Irregulars</td><td>Change form<span class="example-sent">He <span class="highlight">went</span> (go) home.</span></td><td><b>did not</b> + Verb<span class="example-sent">He <span class="highlight">did not go</span> home.</span></td></tr>
+                <tr><td>All Subjects</td><td>Verb + <span class="highlight">ed</span></td><td><b>did not</b> + Verb</td></tr>
+                <tr><td>Irregulars</td><td>Change form</td><td><b>did not</b> + Verb</td></tr>
             </table>`,
             questions: [
                 { q: "We ___ (visit) the museum yesterday.", a: "visited" },
@@ -137,7 +153,7 @@
             usage: "Upcoming actions or predictions.<br><span class='lang-label'>將發生的動作或預測。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td><b>will</b> + Verb<span class="example-sent">I <span class="highlight">will help</span> you.</span></td><td><b>will not</b> + Verb<span class="example-sent">I <span class="highlight">will not help</span>.</span></td></tr>
+                <tr><td>All Subjects</td><td><b>will</b> + Verb</td><td><b>will not</b> + Verb</td></tr>
             </table>`,
             questions: [
                 { q: "I ___ (help) you with your bags.", a: "will help" },
@@ -156,10 +172,7 @@
 
     function goToMenu() {
         var input = document.getElementById('student-name');
-        if (input.value.trim() === "") {
-            alert("Please enter your name.");
-            return;
-        }
+        if (input.value.trim() === "") { alert("Please enter your name."); return; }
         studentName = input.value.trim();
         document.getElementById('login-card').style.display = "none";
         document.getElementById('menu-card').style.display = "block";
@@ -167,8 +180,7 @@
     }
 
     function backToMenu() {
-        currentIdx = 0;
-        studentAnswers = [];
+        currentIdx = 0; studentAnswers = [];
         document.getElementById('rule-card').style.display = 'none';
         document.getElementById('results-container').style.display = 'none';
         document.getElementById('menu-card').style.display = 'block';
@@ -176,11 +188,7 @@
 
     function loadTense(tense) {
         currentTense = tense;
-        var guideHtml = `
-            <h2 style="color:var(--primary); text-align:center;">${data[tense].title}</h2>
-            <div class="usage-box"><strong>Usage (用法):</strong><br>${data[tense].usage}</div>
-            ${data[tense].table}
-        `;
+        var guideHtml = `<h2 style="color:var(--primary); text-align:center;">${data[tense].title}</h2><div class="usage-box"><strong>Usage (用法):</strong><br>${data[tense].usage}</div>${data[tense].table}`;
         document.getElementById('rule-content').innerHTML = guideHtml;
         document.getElementById('modal-inner').innerHTML = guideHtml;
         document.getElementById('menu-card').style.display = 'none';
@@ -204,14 +212,12 @@
             <p style="text-align:center; color:#666;">Question ${currentIdx + 1} of 10</p>
             <h3 style="text-align:center; margin: 30px 0;">${item.q}</h3>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
-            <button onclick="next()">Submit Answer</button>
-        `;
+            <button onclick="next()">Submit Answer</button>`;
         document.getElementById('user-input').focus();
     }
 
     function next() {
-        var val = document.getElementById('user-input').value;
-        studentAnswers.push(val);
+        studentAnswers.push(document.getElementById('user-input').value);
         currentIdx++;
         if (currentIdx < 10) showQuestion(); else showResults();
     }
@@ -219,8 +225,7 @@
     function normalize(text) {
         if (!text) return "";
         var n = text.toLowerCase().trim();
-        n = n.replace(/[’']/g, "'");
-        n = n.replace("don't", "do not").replace("doesn't", "does not").replace("didn't", "did not").replace("won't", "will not").replace("can't", "cannot");
+        n = n.replace(/[’']/g, "'").replace("don't", "do not").replace("doesn't", "does not").replace("didn't", "did not").replace("won't", "will not").replace("can't", "cannot");
         n = n.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
         return n.replace(/\s+/g, ' ');
     }
@@ -228,20 +233,32 @@
     function showResults() {
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
-        var score = 0;
-        var html = "";
+        var score = 0, html = "";
         for (var i = 0; i < 10; i++) {
             var q = data[currentTense].questions[i];
             var isCorrect = normalize(studentAnswers[i]) === normalize(q.a);
             if(isCorrect) score++;
-            html += `<div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
-                <strong>${q.q}</strong><br>
-                ${isCorrect ? '✓ ' + studentAnswers[i] : '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span> <span class="fixed">' + q.a + '</span>'}
+            html += `
+            <div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
+                <div class="status-icon">${isCorrect ? '✓' : '✘'}</div>
+                <div class="report-text">
+                    <strong>${q.q}</strong><br>
+                    ${isCorrect ? 
+                        '<span>' + studentAnswers[i] + '</span>' : 
+                        '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
+                </div>
             </div>`;
         }
+        finalScore = score * 10;
         document.getElementById('result-title').innerText = studentName + " - " + data[currentTense].title;
-        document.getElementById('score-summary').innerHTML = `<h3 style="text-align:center;">Final Score: ${score * 10}%</h3>`;
+        document.getElementById('score-summary').innerHTML = `<h3 style="text-align:center; font-size: 1.5rem;">Grade: ${finalScore}% (${score}/10)</h3>`;
         document.getElementById('report-list').innerHTML = html;
+    }
+
+    function shareToLine() {
+        var text = studentName + " just scored " + finalScore + "% in " + data[currentTense].title + " at Andrew's English Classroom!";
+        var lineUrl = "https://line.me/R/msg/text/?" + encodeURIComponent(text);
+        window.open(lineUrl, '_blank');
     }
 </script>
 </body>
