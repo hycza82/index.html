@@ -17,9 +17,11 @@
         
         .tense-indicator { font-size: 0.85rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
 
-        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 8px; }
-        .lesson-btn:hover { background: #f0f7ff; border-color: var(--primary); }
-        .lesson-btn .cn-text { font-size: 0.9rem; font-weight: 400; color: #666; }
+        /* Enhanced Bilingual Menu Buttons */
+        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 12px; transition: all 0.2s; }
+        .lesson-btn:hover { background: #f0f7ff; border-color: var(--primary); transform: translateY(-2px); }
+        .lesson-btn span:first-child { font-weight: 700; font-size: 1.1rem; color: #333; }
+        .lesson-btn .cn-text { font-size: 0.95rem; font-weight: 400; color: #666; }
 
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
@@ -67,7 +69,7 @@
 
     <div id="menu-card" class="card" style="display:none;">
         <h3 id="welcome-msg" style="color: var(--primary); text-align: center;"></h3>
-        <h2 style="margin-top:0; text-align: center;">Select a Lesson <span class="lang-label">選擇課程</span></h2>
+        <h2 style="margin-top:0; text-align: center;">Select a Lesson / 選擇課程</h2>
         <button class="lesson-btn" onclick="loadTense('present')">
             <span>Present Simple</span><span class="cn-text">現在簡單式</span>
         </button>
