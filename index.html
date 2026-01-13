@@ -1,3 +1,10 @@
+Understood. I have finalized the code to include exactly **10 questions for all 6 tenses** (totaling 60 questions), featuring both **affirmative and negative** forms.
+
+I have also ensured that the **Traditional Chinese translations**, the **Help/Rule card**, and the **Andrew's English branding** are all fully restored and integrated.
+
+### Final Deployment Code
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,101 +84,67 @@
 </div>
 
 <script>
-    var studentName = "";
-    var currentTense = "";
-    var currentIdx = 0;
-    var score = 0;
-    var studentHistory = [];
+    var studentName = "", currentTense = "", currentIdx = 0, score = 0, studentHistory = [];
 
     var data = {
         presentSimple: {
             title: "Present Simple 現在簡單式",
             questions: [
-                {q: "He ___ (drink) milk every day.", a: "drinks"},
-                {q: "They ___ (not like) apples.", a: "do not like"},
-                {q: "She ___ (study) English.", a: "studies"},
-                {q: "I ___ (not play) soccer.", a: "do not play"},
-                {q: "The cat ___ (sleep) on the sofa.", a: "sleeps"},
-                {q: "Water ___ (boil) at 100°C.", a: "boils"},
-                {q: "We ___ (not live) in Taipei.", a: "do not live"},
-                {q: "He ___ (wash) his car every week.", a: "washes"},
-                {q: "You ___ (not speak) French.", a: "do not speak"},
-                {q: "The sun ___ (rise) in the east.", a: "rises"}
+                {q: "He ___ (drink) milk every day.", a: "drinks"}, {q: "They ___ (not like) apples.", a: "do not like"},
+                {q: "She ___ (study) English.", a: "studies"}, {q: "I ___ (not play) soccer.", a: "do not play"},
+                {q: "The cat ___ (sleep) on the sofa.", a: "sleeps"}, {q: "Water ___ (boil) at 100°C.", a: "boils"},
+                {q: "We ___ (not live) in Taipei.", a: "do not live"}, {q: "He ___ (wash) his car every week.", a: "washes"},
+                {q: "You ___ (not speak) French.", a: "do not speak"}, {q: "The sun ___ (rise) in the east.", a: "rises"}
             ]
         },
         pastSimple: {
             title: "Past Simple 過去簡單式",
             questions: [
-                {q: "I ___ (visit) Japan last year.", a: "visited"},
-                {q: "They ___ (not go) to school yesterday.", a: "did not go"},
-                {q: "She ___ (see) a movie last night.", a: "saw"},
-                {q: "He ___ (not eat) his lunch.", a: "did not eat"},
-                {q: "We ___ (play) tennis on Sunday.", a: "played"},
-                {q: "The bus ___ (stop) here 5 minutes ago.", a: "stopped"},
-                {q: "You ___ (not call) me last night.", a: "did not call"},
-                {q: "I ___ (buy) a new phone.", a: "bought"},
-                {q: "They ___ (finish) the homework.", a: "finished"},
-                {q: "It ___ (not rain) yesterday.", a: "did not rain"}
+                {q: "I ___ (visit) Japan last year.", a: "visited"}, {q: "They ___ (not go) to school yesterday.", a: "did not go"},
+                {q: "She ___ (see) a movie last night.", a: "saw"}, {q: "He ___ (not eat) his lunch.", a: "did not eat"},
+                {q: "We ___ (play) tennis on Sunday.", a: "played"}, {q: "The bus ___ (stop) here 5 mins ago.", a: "stopped"},
+                {q: "You ___ (not call) me last night.", a: "did not call"}, {q: "I ___ (buy) a new phone.", a: "bought"},
+                {q: "They ___ (finish) the homework.", a: "finished"}, {q: "It ___ (not rain) yesterday.", a: "did not rain"}
             ]
         },
         futureSimple: {
             title: "Future Simple 未來簡單式",
             questions: [
-                {q: "I ___ (help) you tomorrow.", a: "will help"},
-                {q: "They ___ (not come) to the party.", a: "will not come"},
-                {q: "She ___ (travel) to London.", a: "will travel"},
-                {q: "We ___ (not forget) the keys.", a: "will not forget"},
-                {q: "He ___ (buy) a house next year.", a: "will buy"},
-                {q: "It ___ (be) sunny on Friday.", a: "will be"},
-                {q: "You ___ (love) this movie.", a: "will love"},
-                {q: "I ___ (not watch) TV tonight.", a: "will not watch"},
-                {q: "They ___ (win) the match.", a: "will win"},
-                {q: "She ___ (not call) him again.", a: "will not call"}
+                {q: "I ___ (help) you tomorrow.", a: "will help"}, {q: "They ___ (not come) to the party.", a: "will not come"},
+                {q: "She ___ (travel) to London.", a: "will travel"}, {q: "We ___ (not forget) the keys.", a: "will not forget"},
+                {q: "He ___ (buy) a house next year.", a: "will buy"}, {q: "It ___ (be) sunny on Friday.", a: "will be"},
+                {q: "You ___ (love) this movie.", a: "will love"}, {q: "I ___ (not watch) TV tonight.", a: "will not watch"},
+                {q: "They ___ (win) the match.", a: "will win"}, {q: "She ___ (not call) him again.", a: "will not call"}
             ]
         },
         presentContinuous: {
             title: "Present Continuous 現在進行式",
             questions: [
-                {q: "I ___ (read) a book now.", a: "am reading"},
-                {q: "They ___ (not dance) right now.", a: "are not dancing"},
-                {q: "She ___ (cook) dinner.", a: "is cooking"},
-                {q: "It ___ (rain) outside.", a: "is raining"},
-                {q: "We ___ (not watch) a movie.", a: "are not watching"},
-                {q: "You ___ (listen) to music.", a: "are listening"},
-                {q: "He ___ (not work) today.", a: "is not working"},
-                {q: "The dog ___ (bark) at the cat.", a: "is barking"},
-                {q: "I ___ (not cry) right now.", a: "am not crying"},
-                {q: "They ___ (play) basketball.", a: "are playing"}
+                {q: "I ___ (read) a book now.", a: "am reading"}, {q: "They ___ (not dance) right now.", a: "are not dancing"},
+                {q: "She ___ (cook) dinner.", a: "is cooking"}, {q: "It ___ (rain) outside.", a: "is raining"},
+                {q: "We ___ (not watch) a movie.", a: "are not watching"}, {q: "You ___ (listen) to music.", a: "are listening"},
+                {q: "He ___ (not work) today.", a: "is not working"}, {q: "The dog ___ (bark) at the cat.", a: "is barking"},
+                {q: "I ___ (not cry) right now.", a: "am not crying"}, {q: "They ___ (play) basketball.", a: "are playing"}
             ]
         },
         pastContinuous: {
             title: "Past Continuous 過去進行式",
             questions: [
-                {q: "I ___ (eat) dinner at 7 PM.", a: "was eating"},
-                {q: "They ___ (not study) then.", a: "were not studying"},
-                {q: "She ___ (sleep) when you called.", a: "was sleeping"},
-                {q: "We ___ (walk) in the park.", a: "were walking"},
-                {q: "He ___ (not drive) fast.", a: "was not driving"},
-                {q: "You ___ (sing) on stage.", a: "were singing"},
-                {q: "It ___ (snow) last night.", a: "was snowing"},
-                {q: "The kids ___ (play) outside.", a: "were playing"},
-                {q: "I ___ (not feeling) well then.", a: "was not feeling"},
-                {q: "The birds ___ (fly) south.", a: "were flying"}
+                {q: "I ___ (eat) dinner at 7 PM.", a: "was eating"}, {q: "They ___ (not study) then.", a: "were not studying"},
+                {q: "She ___ (sleep) when you called.", a: "was sleeping"}, {q: "We ___ (walk) in the park.", a: "were walking"},
+                {q: "He ___ (not drive) fast.", a: "was not driving"}, {q: "You ___ (sing) on stage.", a: "were singing"},
+                {q: "It ___ (snow) last night.", a: "was snowing"}, {q: "The kids ___ (play) outside.", a: "were playing"},
+                {q: "I ___ (not feeling) well then.", a: "was not feeling"}, {q: "The birds ___ (fly) south.", a: "were flying"}
             ]
         },
         futureContinuous: {
             title: "Future Continuous 未來進行式",
             questions: [
-                {q: "I ___ (wait) for you at 5 PM.", a: "will be waiting"},
-                {q: "They ___ (not work) at 10 PM.", a: "will not be working"},
-                {q: "She ___ (fly) to Paris.", a: "will be flying"},
-                {q: "We ___ (have) lunch at noon.", a: "will be having"},
-                {q: "He ___ (not sleep) during flight.", a: "will not be sleeping"},
-                {q: "You ___ (study) all night.", a: "will be studying"},
-                {q: "It ___ (rain) later.", a: "will be raining"},
-                {q: "I ___ (not use) the laptop then.", a: "will not be using"},
-                {q: "They ___ (swim) in the ocean.", a: "will be swimming"},
-                {q: "She ___ (wear) a red dress.", a: "will be wearing"}
+                {q: "I ___ (wait) for you at 5 PM.", a: "will be waiting"}, {q: "They ___ (not work) at 10 PM.", a: "will not be working"},
+                {q: "She ___ (fly) to Paris.", a: "will be flying"}, {q: "We ___ (have) lunch at noon.", a: "will be having"},
+                {q: "He ___ (not sleep) during flight.", a: "will not be sleeping"}, {q: "You ___ (study) all night.", a: "will be studying"},
+                {q: "It ___ (rain) later.", a: "will be raining"}, {q: "I ___ (not use) the laptop then.", a: "will not be using"},
+                {q: "They ___ (swim) in the ocean.", a: "will be swimming"}, {q: "She ___ (wear) a red dress.", a: "will be wearing"}
             ]
         }
     };
@@ -247,3 +220,7 @@
 </script>
 </body>
 </html>
+
+```
+
+Would you like me to help you set up a **Google Sheets integration** so that your student results are automatically saved to a spreadsheet?
