@@ -6,16 +6,13 @@
     <title>Andrew's English | Online Classroom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --success: #38a169; --error: #e53e3e; --bg: #f8f9fa; --accent: #ffd700; }
+        :root { --primary: #1a73e8; --success: #38a169; --error: #e53e3e; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 800px; }
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
-        
         .school-header { text-align: center; margin-bottom: 30px; }
         .school-logo { max-width: 180px; height: auto; margin-bottom: 15px; border-radius: 8px; }
         .school-name { color: var(--primary); margin: 0; font-size: 2.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* Study Guide Styles */
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
@@ -23,21 +20,16 @@
         .highlight { color: var(--error); font-weight: bold; text-decoration: underline; }
         .example-sent { display: block; margin-top: 5px; color: #444; font-style: italic; }
         .lang-label { font-size: 0.8rem; color: #666; display: block; margin-top: 2px; }
-
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
-        
-        /* Modal for Hint */
-        #hint-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); overflow: auto; }
-        .modal-content { background: white; margin: 5% auto; padding: 20px; border-radius: 12px; width: 90%; max-width: 700px; }
-
+        #hint-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); overflow: auto; }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 12px; width: 90%; max-width: 700px; }
         .report-row { padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid; }
         .report-row.correct { background: #e6fffa; border-color: var(--success); }
         .report-row.incorrect { background: #fff5f5; border-color: var(--error); }
         .strike { text-decoration: line-through; color: var(--error); margin-right: 10px; }
         .fixed { color: var(--success); font-weight: bold; }
-        
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
     </style>
 </head>
@@ -52,7 +44,7 @@
     <div id="login-card" class="card">
         <h2 style="text-align:center;">Student Portal <span class="lang-label">學生登入</span></h2>
         <input type="text" id="student-name" placeholder="Enter your full name">
-        <button onclick="goToMenu()">Enter Classroom / 進入教室</button>
+        <button id="login-btn" onclick="goToMenu()">Enter Classroom / 進入教室</button>
     </div>
 
     <div id="menu-card" class="card" style="display:none;">
@@ -87,7 +79,7 @@
 <div id="hint-modal">
     <div class="modal-content">
         <div id="modal-inner"></div>
-        <button onclick="toggleHint()">Close Rules / 關閉</button>
+        <button style="background: var(--error);" onclick="toggleHint()">Close Rules / 關閉</button>
     </div>
 </div>
 
@@ -103,8 +95,8 @@
             usage: "Habits, routines, and facts.<br><span class='lang-label'>習慣、常態、事實。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>I / You / We / They</td><td>Base Verb<span class="example-sent">I <span class="highlight">eat</span>.</span></td><td><b>do not</b> + Verb<span class="example-sent">They <span class="highlight">do not eat</span>.</span></td></tr>
-                <tr><td>He / She / It</td><td>Verb + <span class="highlight">s/es</span><span class="example-sent">He <span class="highlight">eats</span>.</span></td><td><b>does not</b> + Verb<span class="example-sent">She <span class="highlight">does not eat</span>.</span></td></tr>
+                <tr><td>I / You / We / They</td><td>Base Verb<span class="example-sent">I <span class="highlight">eat</span> apples.</span></td><td><b>do not</b> + Verb<span class="example-sent">They <span class="highlight">do not eat</span>.</span></td></tr>
+                <tr><td>He / She / It</td><td>Verb + <span class="highlight">s/es</span><span class="example-sent">He <span class="highlight">eats</span> apples.</span></td><td><b>does not</b> + Verb<span class="example-sent">She <span class="highlight">does not eat</span>.</span></td></tr>
             </table>`,
             questions: [
                 { q: "She ___ (eat) an apple every morning.", a: "eats" },
@@ -124,8 +116,8 @@
             usage: "Actions finished in the past.<br><span class='lang-label'>過去已完成的動作。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td>Verb + <span class="highlight">ed</span><span class="example-sent">I <span class="highlight">talked</span>.</span></td><td><b>did not</b> + Verb<span class="example-sent">I <span class="highlight">did not talk</span>.</span></td></tr>
-                <tr><td>Irregulars</td><td>Check list<span class="example-sent">He <span class="highlight">went</span> home.</span></td><td><b>did not</b> + Verb<span class="example-sent">He <span class="highlight">did not go</span>.</span></td></tr>
+                <tr><td>All Subjects</td><td>Verb + <span class="highlight">ed</span><span class="example-sent">I <span class="highlight">talked</span> to him.</span></td><td><b>did not</b> + Verb<span class="example-sent">I <span class="highlight">did not talk</span>.</span></td></tr>
+                <tr><td>Irregulars</td><td>Change form<span class="example-sent">He <span class="highlight">went</span> (go) home.</span></td><td><b>did not</b> + Verb<span class="example-sent">He <span class="highlight">did not go</span> home.</span></td></tr>
             </table>`,
             questions: [
                 { q: "We ___ (visit) the museum yesterday.", a: "visited" },
@@ -145,7 +137,7 @@
             usage: "Upcoming actions or predictions.<br><span class='lang-label'>將發生的動作或預測。</span>",
             table: `<table class="rule-table">
                 <tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr>
-                <tr><td>All Subjects</td><td><b>will</b> + Verb<span class="example-sent">I <span class="highlight">will help</span>.</span></td><td><b>will not</b> + Verb<span class="example-sent">I <span class="highlight">will not help</span>.</span></td></tr>
+                <tr><td>All Subjects</td><td><b>will</b> + Verb<span class="example-sent">I <span class="highlight">will help</span> you.</span></td><td><b>will not</b> + Verb<span class="example-sent">I <span class="highlight">will not help</span>.</span></td></tr>
             </table>`,
             questions: [
                 { q: "I ___ (help) you with your bags.", a: "will help" },
@@ -163,11 +155,14 @@
     };
 
     function goToMenu() {
-        var nameInput = document.getElementById('student-name').value;
-        if(!nameInput.trim()) { alert("Please enter your name"); return; }
-        studentName = nameInput.trim();
-        document.getElementById('login-card').style.display = 'none';
-        document.getElementById('menu-card').style.display = 'block';
+        var input = document.getElementById('student-name');
+        if (input.value.trim() === "") {
+            alert("Please enter your name.");
+            return;
+        }
+        studentName = input.value.trim();
+        document.getElementById('login-card').style.display = "none";
+        document.getElementById('menu-card').style.display = "block";
         document.getElementById('welcome-msg').innerText = "Welcome, " + studentName + "!";
     }
 
@@ -235,7 +230,7 @@
         document.getElementById('results-container').style.display = 'block';
         var score = 0;
         var html = "";
-        for (var i = 0; i < data[currentTense].questions.length; i++) {
+        for (var i = 0; i < 10; i++) {
             var q = data[currentTense].questions[i];
             var isCorrect = normalize(studentAnswers[i]) === normalize(q.a);
             if(isCorrect) score++;
