@@ -15,7 +15,6 @@
         
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; position: relative; }
         
-        /* 6-Box Grid Selection */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 650px) { .menu-grid { grid-template-columns: 1fr; } }
 
@@ -29,7 +28,6 @@
         .btn-en { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .btn-cn { font-size: 0.9rem; font-weight: 400; display: block; opacity: 0.9; }
 
-        /* Navigation Buttons */
         .home-btn { 
             position: fixed; bottom: 20px; left: 20px; 
             background: #444; color: white; border: none; 
@@ -37,19 +35,45 @@
             font-weight: bold; cursor: pointer; z-index: 100;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .home-btn:hover { background: #222; }
 
-        /* Tables & Boxes */
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; }
         
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
-        .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; display: block; }
+        .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; display: block; color: var(--primary); }
+
+        /* Social, Modal & PDF */
+        .share-container { display: flex; gap: 10px; margin: 15px 0; }
+        .share-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-line { background-color: var(--line); }
+        .btn-fb { background-color: var(--fb); }
+        .btn-pdf { background-color: #607d8b; width: 100%; margin-bottom: 10px; padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
+
+        #rules-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+        .modal-content { background: white; margin: 10% auto; padding: 30px; width: 90%; max-width: 650px; border-radius: 16px; position: relative; max-height: 80vh; overflow-y: auto; }
+        .close-modal { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
+        .review-rules-btn { background: #f1f3f4; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+
+        /* PRINT SETTINGS (For PDF) */
+        @media print {
+            .home-btn, .share-container, .btn-pdf, .review-rules-btn, button, .school-header { display: none !important; }
+            .card { box-shadow: none; border: 1px solid #000; padding: 20px; }
+            body { background: white; padding: 0; }
+            .app-container { max-width: 100%; }
+            #score-summary { font-size: 2.5rem; color: black !important; }
+        }
     </style>
 </head>
 <body>
+
+<div id="rules-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
 
 <div class="app-container">
     <header class="school-header">
@@ -87,24 +111,29 @@
     </div>
 
     <div id="results-container" class="card" style="display:none;">
-        <h2 id="result-title" style="text-align:center;">Results</h2>
-        <div id="score-summary" style="text-align:center; font-size: 2rem; margin: 20px 0;"></div>
+        <h2 style="text-align:center;">Andrew's English | Report Card</h2>
+        <div id="score-summary" style="text-align:center; font-size: 2rem; margin: 20px 0; font-weight: bold; color: var(--primary);"></div>
+        
+        <button class="btn-pdf" onclick="window.print()">📥 Save Report as PDF / 儲存 PDF 報告</button>
+
+        <div class="share-container">
+            <button class="share-btn btn-line" onclick="shareResult('line')">LINE 分享</button>
+            <button class="share-btn btn-fb" onclick="shareResult('fb')">Facebook</button>
+        </div>
+
         <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="backToMenu()">Try Another Lesson</button>
         <button class="home-btn" onclick="backToMenu()">🏠 Back to Home</button>
     </div>
 </div>
 
 <script>
-    var studentName = "";
-    var currentTense = "";
-    var currentIdx = 0;
-    var score = 0;
+    var studentName = "", currentTense = "", currentIdx = 0, score = 0;
 
     var data = {
         presentSimple: {
             title: "Present Simple 現在簡單式",
             usage: "Habits and facts. / 習慣與事實。",
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>I/You/We/They</td><td>Base verb</td><td>do not + verb</td></tr><tr><td>He/She/It</td><td>verb + s/es</td><td>does not + verb</td></tr></table>`,
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>I/You/We/They</td><td>Base verb</td><td>do not + verb</td></tr><tr><td>He/She/It</td><td>verb + s/es</td><td>does not + verb</td></tr></table>`,
             questions: [
                 {q: "He ___ (drink) milk every day.", t: "他每天喝牛奶。", a: "drinks"},
                 {q: "They ___ (not like) apples.", t: "他們不喜歡蘋果。", a: "do not like"},
@@ -115,13 +144,77 @@
                 {q: "We ___ (not live) here.", t: "我們不住在這裡。", a: "do not live"},
                 {q: "He ___ (wash) his car.", t: "他洗他的車。", a: "washes"},
                 {q: "You ___ (not speak) French.", t: "你不說法語。", a: "do not speak"},
-                {q: "Sun ___ (rise) in the east.", t: "太陽從東方升起。", a: "rises"}
+                {q: "Sun ___ (rise) in the east.", t: "太陽從東方升起。", a: "rises"},
+                {q: "I ___ (eat) breakfast at 7.", t: "我七點吃早餐。", a: "eat"},
+                {q: "She ___ (not have) a car.", t: "她沒有車。", a: "does not have"},
+                {q: "Birds ___ (fly) in the sky.", t: "鳥在天空飛。", a: "fly"},
+                {q: "It ___ (not snow) in summer.", t: "夏天不下雪。", a: "does not snow"},
+                {q: "We ___ (read) books.", t: "我們讀書。", a: "read"},
+                {q: "He ___ (not watch) TV.", t: "他不看電視。", a: "does not watch"},
+                {q: "They ___ (work) in a bank.", t: "他們在銀行工作。", a: "work"},
+                {q: "You ___ (not need) help.", t: "你不需要幫助。", a: "do not need"},
+                {q: "Plants ___ (need) water.", t: "植物需要水。", a: "need"},
+                {q: "I ___ (not know) him.", t: "我不認識他。", a: "do not know"}
+            ]
+        },
+        pastSimple: {
+            title: "Past Simple 過去簡單式",
+            usage: "Completed actions in the past. / 過去完成的動作。",
+            table: `<table class="rule-table"><tr><th>Type</th><th>Structure</th></tr><tr><td>Affirmative (+)</td><td>Verb + ed (or irregular)</td></tr><tr><td>Negative (-)</td><td>did not + base verb</td></tr></table>`,
+            questions: [
+                {q: "I ___ (visit) Japan last year.", t: "我去年去日本。", a: "visited"},
+                {q: "They ___ (not go) to school yesterday.", t: "他們昨天沒去學校。", a: "did not go"},
+                {q: "She ___ (see) a movie last night.", t: "她昨晚看電影。", a: "saw"},
+                {q: "He ___ (not eat) his lunch.", t: "他沒吃午餐。", a: "did not eat"},
+                {q: "We ___ (play) tennis on Sunday.", t: "我們週日打網球。", a: "played"},
+                {q: "The bus ___ (stop) here 5 mins ago.", t: "公車5分鐘前停這。", a: "stopped"},
+                {q: "You ___ (not call) me last night.", t: "你昨晚沒打給我。", a: "did not call"},
+                {q: "I ___ (buy) a new phone.", t: "我買了新手機。", a: "bought"},
+                {q: "They ___ (finish) the homework.", t: "他們完成了作業。", a: "finished"},
+                {q: "It ___ (not rain) yesterday.", t: "昨天沒下雨。", a: "did not rain"},
+                {q: "I ___ (find) a wallet.", t: "我發現一個皮夾。", a: "found"},
+                {q: "We ___ (not see) the accident.", t: "我們沒看到事故。", a: "did not see"},
+                {q: "She ___ (lost) her keys.", t: "她弄丟了鑰匙。", a: "lost"},
+                {q: "He ___ (not tell) me.", t: "他沒告訴我。", a: "did not tell"},
+                {q: "They ___ (won) the game.", t: "他們贏了比賽。", a: "won"},
+                {q: "You ___ (not sleep) well.", t: "你沒睡好。", a: "did not sleep"},
+                {q: "I ___ (drank) some juice.", t: "我喝了一些果汁。", a: "drank"},
+                {q: "We ___ (not leave) late.", t: "我們沒太晚離開。", a: "did not leave"},
+                {q: "It ___ (was) cold.", t: "天氣很冷。", a: "was"},
+                {q: "He ___ (not write) a letter.", t: "他沒寫信。", a: "did not write"}
+            ]
+        },
+        futureSimple: {
+            title: "Future Simple 未來簡單式",
+            usage: "Future plans and predictions. / 未來計劃與預測。",
+            table: `<table class="rule-table"><tr><th>Type</th><th>Structure</th></tr><tr><td>Affirmative (+)</td><td>will + base verb</td></tr><tr><td>Negative (-)</td><td>will not + base verb</td></tr></table>`,
+            questions: [
+                {q: "I ___ (help) you tomorrow.", t: "我明天會幫你。", a: "will help"},
+                {q: "They ___ (not come) to the party.", t: "他們不會來派對。", a: "will not come"},
+                {q: "She ___ (travel) to London.", t: "她會去倫敦旅遊。", a: "will travel"},
+                {q: "We ___ (not forget) the keys.", t: "我們不會忘記鑰匙。", a: "will not forget"},
+                {q: "He ___ (buy) a house.", t: "他會買房子。", a: "will buy"},
+                {q: "It ___ (be) sunny.", t: "天氣會晴朗。", a: "will be"},
+                {q: "You ___ (love) this movie.", t: "你會喜歡這部電影。", a: "will love"},
+                {q: "I ___ (not watch) TV.", t: "我不會看電視。", a: "will not watch"},
+                {q: "They ___ (win) the match.", t: "他們會贏比賽。", a: "will win"},
+                {q: "She ___ (not call) again.", t: "她不會再打來。", a: "will not call"},
+                {q: "I ___ (stay) here.", t: "我會待在這。", a: "will stay"},
+                {q: "He ___ (not fail).", t: "他不會失敗。", a: "will not fail"},
+                {q: "We ___ (meet) later.", t: "我們等下會見面。", a: "will meet"},
+                {q: "You ___ (not regret) it.", t: "你不會後悔。", a: "will not regret"},
+                {q: "They ___ (arrive) soon.", t: "他們快到了。", a: "will arrive"},
+                {q: "It ___ (not rain).", t: "不會下雨。", a: "will not rain"},
+                {q: "She ___ (become) a doctor.", t: "她會成為醫生。", a: "will become"},
+                {q: "I ___ (not tell) anyone.", t: "我不會告訴任何人。", a: "will not tell"},
+                {q: "We ___ (be) late.", t: "我們會遲到。", a: "will be"},
+                {q: "You ___ (win).", t: "你會贏。", a: "will win"}
             ]
         },
         presentContinuous: {
             title: "Present Continuous 現在進行式",
             usage: "Actions happening now. / 正在發生的動作。",
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>I</td><td>am + verb-ing</td><td>am not + verb-ing</td></tr><tr><td>He/She/It</td><td>is + verb-ing</td><td>is not + verb-ing</td></tr><tr><td>You/We/They</td><td>are + verb-ing</td><td>are not + verb-ing</td></tr></table>`,
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Structure</th></tr><tr><td>I</td><td>am (not) + verb-ing</td></tr><tr><td>He/She/It</td><td>is (not) + verb-ing</td></tr><tr><td>You/We/They</td><td>are (not) + verb-ing</td></tr></table>`,
             questions: [
                 {q: "I ___ (read) a book now.", t: "我現在正在讀書。", a: "am reading"},
                 {q: "They ___ (not dance) right now.", t: "他們現在沒在跳舞。", a: "are not dancing"},
@@ -130,47 +223,88 @@
                 {q: "We ___ (not watch) TV.", t: "我們沒在看電視。", a: "are not watching"},
                 {q: "You ___ (listen) to music.", t: "你正在聽音樂。", a: "are listening"},
                 {q: "He ___ (not work) today.", t: "他今天沒在工作。", a: "is not working"},
-                {q: "The dog ___ (bark) at me.", t: "那隻狗正在對我叫。", a: "is barking"},
+                {q: "The dog ___ (bark).", t: "那隻狗正在叫。", a: "is barking"},
                 {q: "I ___ (not cry).", t: "我沒在哭。", a: "am not crying"},
-                {q: "They ___ (play) in the park.", t: "他們正在公園玩。", a: "are playing"}
+                {q: "They ___ (play) in the park.", t: "他們正在公園玩。", a: "are playing"},
+                {q: "She ___ (sleep).", t: "她正在睡覺。", a: "is sleeping"},
+                {q: "We ___ (not wait).", t: "我們沒在等。", a: "are not waiting"},
+                {q: "You ___ (drive).", t: "你正在開車。", a: "are driving"},
+                {q: "He ___ (not listening).", t: "他沒在聽。", a: "is not listening"},
+                {q: "It ___ (get) dark.", t: "天快黑了。", a: "is getting"},
+                {q: "They ___ (not swimming).", t: "他們沒在游泳。", a: "are not swimming"},
+                {q: "I ___ (writing).", t: "我正在寫字。", a: "am writing"},
+                {q: "She ___ (not singing).", t: "她沒在唱歌。", a: "is not singing"},
+                {q: "We ___ (learning).", t: "我們正在學習。", a: "are learning"},
+                {q: "The cat ___ (running).", t: "貓正在跑。", a: "is running"}
             ]
         },
         pastContinuous: {
             title: "Past Continuous 過去進行式",
-            usage: "Action happening at a past time. / 過去某時正在進行的動作。",
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>I/He/She/It</td><td>was + verb-ing</td><td>was not + verb-ing</td></tr><tr><td>You/We/They</td><td>were + verb-ing</td><td>were not + verb-ing</td></tr></table>`,
+            usage: "Actions in progress in the past. / 過去正在進行的動作。",
+            table: `<table class="rule-table"><tr><th>Subject</th><th>Structure</th></tr><tr><td>I/He/She/It</td><td>was (not) + verb-ing</td></tr><tr><td>You/We/They</td><td>were (not) + verb-ing</td></tr></table>`,
             questions: [
                 {q: "I ___ (eat) dinner at 7 PM.", t: "我七點時正在吃晚餐。", a: "was eating"},
                 {q: "They ___ (not study) yesterday.", t: "他們昨天那時沒在學習。", a: "were not studying"},
                 {q: "She ___ (sleep) when I called.", t: "我打電話時她正在睡覺。", a: "was sleeping"},
                 {q: "We ___ (walk) in the rain.", t: "我們那時正在雨中走路。", a: "were walking"},
-                {q: "He ___ (not drive) the car.", t: "他那時沒在開車。", a: "was not driving"},
-                {q: "You ___ (sing) on stage.", t: "你那時在台上唱歌。", a: "were singing"},
-                {q: "It ___ (snow) last night.", t: "昨晚那時正在下雪。", a: "was snowing"},
-                {q: "The kids ___ (play) outside.", t: "孩子們那時在外面玩。", a: "were playing"},
+                {q: "He ___ (not drive).", t: "他那時沒在開車。", a: "was not driving"},
+                {q: "You ___ (sing).", t: "你那時在唱歌。", a: "were singing"},
+                {q: "It ___ (snow) last night.", t: "昨晚那時在下雪。", a: "was snowing"},
                 {q: "I ___ (not feeling) well.", t: "我那時感覺不舒服。", a: "was not feeling"},
-                {q: "Birds ___ (fly) south.", t: "鳥群那時正向南飛。", a: "were flying"}
+                {q: "They ___ (working) hard.", t: "他們那時在努力工作。", a: "were working"},
+                {q: "The sun ___ (shining).", t: "那時陽光普照。", a: "was shining"},
+                {q: "I ___ (not looking).", t: "我那時沒在看。", a: "was not looking"},
+                {q: "We ___ (having) fun.", t: "我們那時玩得很開心。", a: "were having"},
+                {q: "He ___ (talking) to her.", t: "他那時在跟她說話。", a: "was talking"},
+                {q: "They ___ (not waiting).", t: "他們那時沒在等。", a: "were not waiting"},
+                {q: "She ___ (cleaning).", t: "她那時在打掃。", a: "was cleaning"},
+                {q: "You ___ (not helping).", t: "你那時沒在幫忙。", a: "were not helping"},
+                {q: "It ___ (raining).", t: "那時在下雨。", a: "was raining"},
+                {q: "We ___ (studying).", t: "我們那時在讀書。", a: "were studying"},
+                {q: "He ___ (not wearing) a hat.", t: "他那時沒戴帽子。", a: "was not wearing"},
+                {q: "I ___ (waiting) for you.", t: "我那時在等你。", a: "was waiting"}
             ]
         },
         futureContinuous: {
             title: "Future Continuous 未來進行式",
-            usage: "Action happening in the future. / 未來某時將在進行的動作。",
-            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>All Subjects</td><td>will be + verb-ing</td><td>will not be + verb-ing</td></tr></table>`,
+            usage: "Actions that will be in progress. / 未來某時正在進行的動作。",
+            table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative (+)</td><td>will be + verb-ing</td></tr><tr><td>Negative (-)</td><td>will not be + verb-ing</td></tr></table>`,
             questions: [
                 {q: "I ___ (wait) for you.", t: "我到時會正在等你。", a: "will be waiting"},
                 {q: "They ___ (not work) tomorrow.", t: "他們明天到時將不在工作。", a: "will not be working"},
                 {q: "She ___ (fly) to London.", t: "她到時將正飛往倫敦。", a: "will be flying"},
-                {q: "We ___ (have) lunch at noon.", t: "我們中午將正在吃午餐。", a: "will be having"},
-                {q: "He ___ (not sleep) at 10 PM.", t: "晚上十點他將不在睡覺。", a: "will not be sleeping"},
+                {q: "We ___ (have) lunch.", t: "我們那時會正吃午餐。", a: "will be having"},
+                {q: "He ___ (not sleep).", t: "他到時將不在睡覺。", a: "will not be sleeping"},
                 {q: "You ___ (study) tonight.", t: "你今晚將正在學習。", a: "will be studying"},
                 {q: "It ___ (rain) later.", t: "等下將會正在下雨。", a: "will be raining"},
                 {q: "I ___ (not use) the laptop.", t: "我到時將不在用筆電。", a: "will not be using"},
                 {q: "They ___ (swim) in the sea.", t: "他們到時將在海裡游泳。", a: "will be swimming"},
-                {q: "She ___ (wear) a red dress.", t: "她到時將穿著紅裙子。", a: "will be wearing"}
+                {q: "She ___ (wear) a red dress.", t: "她到時將穿著紅裙子。", a: "will be wearing"},
+                {q: "I ___ (driving).", t: "我那時會正在開車。", a: "will be driving"},
+                {q: "We ___ (not dancing).", t: "我們那時不會正在跳舞。", a: "will not be dancing"},
+                {q: "He ___ (meeting) her.", t: "他到時會正跟她見面。", a: "will be meeting"},
+                {q: "You ___ (not staying).", t: "你到時不會待在那。", a: "will not be staying"},
+                {q: "They ___ (playing) soccer.", t: "他們到時會正踢足球。", a: "will be playing"},
+                {q: "It ___ (snowing).", t: "那時會正在下雪。", a: "will be snowing"},
+                {q: "I ___ (not crying).", t: "我那時不會正在哭。", a: "will not be crying"},
+                {q: "She ___ (watching) TV.", t: "她到時會正在看電視。", a: "will be watching"},
+                {q: "We ___ (walking) home.", t: "我們那時會正走路回家。", a: "will be walking"},
+                {q: "He ___ (working) hard.", t: "他那時會正在努力工作。", a: "will be working"}
             ]
         }
-        // Note: pastSimple and futureSimple follow the same structure.
     };
+
+    function toggleModal(show) {
+        if (show) {
+            document.getElementById('modal-body').innerHTML = 
+                `<h2 style="color:var(--primary);">${data[currentTense].title}</h2>` + 
+                `<div class="usage-box">${data[currentTense].usage}</div>` + 
+                data[currentTense].table;
+            document.getElementById('rules-modal').style.display = "block";
+        } else {
+            document.getElementById('rules-modal').style.display = "none";
+        }
+    }
 
     function goToMenu() {
         var input = document.getElementById('student-name');
@@ -202,9 +336,13 @@
     }
 
     function showQuestion() {
+        var total = data[currentTense].questions.length;
         var item = data[currentTense].questions[currentIdx];
         document.getElementById('question-area').innerHTML = `
-            <span class="status-msg">${data[currentTense].title} - Q${currentIdx+1}/10</span>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="status-msg">Q${currentIdx+1}/${total}</span>
+                <button class="review-rules-btn" onclick="toggleModal(true)">📖 Review Rules / 複習規則</button>
+            </div>
             <h3 style="text-align:center;">${item.q}</h3>
             <p style="text-align:center; color:#666;">${item.t}</p>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
@@ -213,16 +351,31 @@
     }
 
     function next() {
+        var total = data[currentTense].questions.length;
         var ans = document.getElementById('user-input').value.toLowerCase().trim();
         if (ans === data[currentTense].questions[currentIdx].a.toLowerCase()) score++;
         currentIdx++;
-        if (currentIdx < 10) showQuestion(); else showResults();
+        if (currentIdx < total) showQuestion(); else showResults();
     }
 
     function showResults() {
+        var total = data[currentTense].questions.length;
+        var finalPct = Math.round((score / total) * 100);
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
-        document.getElementById('score-summary').innerText = studentName + ": " + (score * 10) + "%";
+        document.getElementById('score-summary').innerHTML = `<p>Student: ${studentName}</p><p>Score: ${finalPct}%</p><p>Lesson: ${data[currentTense].title}</p>`;
+    }
+
+    function shareResult(platform) {
+        const total = data[currentTense].questions.length;
+        const finalPct = Math.round((score / total) * 100);
+        const text = `I scored ${finalPct}% on the ${data[currentTense].title} quiz at Andrew's English!`;
+        const url = window.location.href;
+        if (platform === 'line') {
+            window.open(`https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text + " " + url)}`);
+        } else if (platform === 'fb') {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        }
     }
 </script>
 </body>
