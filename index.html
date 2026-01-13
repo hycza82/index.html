@@ -178,19 +178,23 @@
     }
 
     // SMART GRADING LOGIC: Makes contractions optional
-    function normalize(text) {
-        if (!text) return "";
-        return text.toLowerCase()
-                   .trim()
-                   .replace("don't", "do not")
-                   .replace("didn't", "did not")
-                   .replace("won't", "will not")
-                   .replace("doesn't", "does not")
-                   .replace("isn't", "is not")
-                   .replace("aren't", "are not")
-                   .replace("can't", "cannot")
-                   .replace("i'm", "i am")
-                   .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); // Remove punctuation
+function normalize(text) {
+    if (!text) return "";
+    return text.toLowerCase()
+               .trim()
+               // This handles both straight ' and curly ’ apostrophes
+               .replace(/[’']/g, "'") 
+               .replace("don't", "do not")
+               .replace("didn't", "did not")
+               .replace("won't", "will not")
+               .replace("doesn't", "does not")
+               .replace("isn't", "is not")
+               .replace("aren't", "are not")
+               .replace("can't", "cannot")
+               .replace("i'm", "i am")
+               // Removes periods or question marks at the end
+               .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); 
+}
     }
 
     function showResults() {
