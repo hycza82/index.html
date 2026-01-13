@@ -10,43 +10,31 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 800px; }
         
-        /* Persistent Logo Header */
-        .school-header { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            padding-top: 10px;
-            display: flex;
-            justify-content: center;
-        }
-        .school-logo { 
-            max-width: 300px; /* Adjust size here */
-            max-height: 120px; 
-            width: auto;
-            height: auto;
-            display: block;
-        }
+        .school-header { text-align: center; margin-bottom: 30px; padding-top: 10px; display: flex; justify-content: center; }
+        .school-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; display: block; }
         
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
         
-        /* Table & Quiz UI */
+        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; }
+        .lesson-btn .cn-text { font-size: 0.9rem; font-weight: 400; opacity: 0.9; }
+
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; line-height: 1.4; }
         .highlight { color: #d93025; font-weight: bold; text-decoration: underline; }
         .lang-label { font-size: 0.8rem; color: #666; display: block; margin-top: 2px; }
+        .q-translation { font-size: 0.95rem; color: #777; font-weight: 400; margin-top: 8px; display: block; }
 
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
         
-        /* Social Media Buttons */
         .share-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
         .btn-line { background: var(--line); }
         .btn-fb { background: var(--fb); }
         .btn-wa { background: var(--wa); }
 
-        /* Score Report Logic */
         .report-row { padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 15px; }
         .report-row.correct { background: #e6fffa; border-left: 10px solid var(--success); }
         .report-row.incorrect { background: #fff5f5; border-left: 10px solid var(--error); }
@@ -79,9 +67,15 @@
     <div id="menu-card" class="card" style="display:none;">
         <h3 id="welcome-msg" style="color: var(--primary); text-align: center;"></h3>
         <h2 style="margin-top:0; text-align: center;">Select a Lesson <span class="lang-label">選擇課程</span></h2>
-        <button onclick="loadTense('present')">Present Simple / 現在簡單式</button>
-        <button onclick="loadTense('past')">Past Simple / 過去簡單式</button>
-        <button onclick="loadTense('future')">Future Simple / 未來簡單式</button>
+        <button class="lesson-btn" onclick="loadTense('present')">
+            <span>Present Simple</span><span class="cn-text">現在簡單式</span>
+        </button>
+        <button class="lesson-btn" onclick="loadTense('past')">
+            <span>Past Simple</span><span class="cn-text">過去簡單式</span>
+        </button>
+        <button class="lesson-btn" onclick="loadTense('future')">
+            <span>Future Simple</span><span class="cn-text">未來簡單式</span>
+        </button>
     </div>
 
     <div id="rule-card" class="card" style="display:none;">
@@ -99,7 +93,6 @@
         <h2 id="result-title">Quiz Results</h2>
         <div id="score-summary"></div>
         <div id="report-list"></div>
-        
         <div class="no-print">
             <p style="text-align:center; font-weight:bold; margin-top:20px;">Share Your Score! / 分享你的分數！</p>
             <div class="share-container">
@@ -108,7 +101,6 @@
                 <button class="btn-wa" onclick="shareToSocial('whatsapp')">WhatsApp</button>
             </div>
         </div>
-        
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
         <button class="no-print" onclick="window.print()">Download PDF Report / 下載報告</button>
         <button style="background: var(--primary);" class="no-print" onclick="backToMenu()">Try Another Lesson / 選擇其他課程</button>
@@ -117,10 +109,7 @@
 </div>
 
 <div id="hint-modal">
-    <div class="modal-content">
-        <div id="modal-inner"></div>
-        <button style="background: #d93025;" onclick="toggleHint()">Close / 關閉</button>
-    </div>
+    <div class="modal-content"><div id="modal-inner"></div><button style="background: #d93025;" onclick="toggleHint()">Close / 關閉</button></div>
 </div>
 
 <script>
@@ -133,54 +122,54 @@
     var data = {
         present: {
             title: "Present Simple 現在簡單式",
-            usage: "Habits, routines, and facts.",
+            usage: "Habits, routines, and facts. / 習慣、常態、事實。",
             questions: [
-                { q: "She ___ (eat) an apple every morning.", a: "eats" },
-                { q: "They ___ (not like) cold weather.", a: "do not like" },
-                { q: "He ___ (play) the piano very well.", a: "plays" },
-                { q: "I ___ (not drink) coffee in the evening.", a: "do not drink" },
-                { q: "The sun ___ (rise) in the east.", a: "rises" },
-                { q: "We ___ (not watch) TV on weekdays.", a: "do not watch" },
-                { q: "My cat ___ (sleep) on the sofa.", a: "sleeps" },
-                { q: "You ___ (not speak) Spanish fluently.", a: "do not speak" },
-                { q: "It ___ (rain) a lot in April.", a: "rains" },
-                { q: "Birds ___ (not fly) south in the summer.", a: "do not fly" }
+                { q: "She ___ (eat) an apple every morning.", t: "她每天早上吃一個蘋果。", a: "eats" },
+                { q: "They ___ (not like) cold weather.", t: "他們不喜歡寒冷的天氣。", a: "do not like" },
+                { q: "He ___ (play) the piano very well.", t: "他鋼琴彈得很好。", a: "plays" },
+                { q: "I ___ (not drink) coffee in the evening.", t: "我晚上不喝咖啡。", a: "do not drink" },
+                { q: "The sun ___ (rise) in the east.", t: "太陽從東邊升起。", a: "rises" },
+                { q: "We ___ (not watch) TV on weekdays.", t: "我們平日不看電視。", a: "do not watch" },
+                { q: "My cat ___ (sleep) on the sofa.", t: "我的貓睡在沙發上。", a: "sleeps" },
+                { q: "You ___ (not speak) Spanish fluently.", t: "你的西班牙語說得不流利。", a: "do not speak" },
+                { q: "It ___ (rain) a lot in April.", t: "四月常下雨。", a: "rains" },
+                { q: "Birds ___ (not fly) south in the summer.", t: "鳥類在夏天不會飛往南方。", a: "do not fly" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
         },
         past: {
             title: "Past Simple 過去簡單式",
-            usage: "Actions finished in the past.",
+            usage: "Actions finished in the past. / 過去已完成的動作。",
             questions: [
-                { q: "We ___ (visit) the museum yesterday.", a: "visited" },
-                { q: "I ___ (not see) the movie last night.", a: "did not see" },
-                { q: "He ___ (buy) a new bike last week.", a: "bought" },
-                { q: "They ___ (not go) to the party.", a: "did not go" },
-                { q: "She ___ (finish) her homework early.", a: "finished" },
-                { q: "You ___ (not call) me on my birthday.", a: "did not call" },
-                { q: "The dog ___ (bark) at the mailman.", a: "barked" },
-                { q: "It ___ (not snow) last winter.", a: "did not snow" },
-                { q: "We ___ (eat) pizza for dinner.", a: "ate" },
-                { q: "He ___ (not lose) his keys.", a: "did not lose" }
+                { q: "We ___ (visit) the museum yesterday.", t: "我們昨天參觀了博物館。", a: "visited" },
+                { q: "I ___ (not see) the movie last night.", t: "我昨晚沒看那部電影。", a: "did not see" },
+                { q: "He ___ (buy) a new bike last week.", t: "他上週買了一輛新單車。", a: "bought" },
+                { q: "They ___ (not go) to the party.", t: "他們沒去參加派對。", a: "did not go" },
+                { q: "She ___ (finish) her homework early.", t: "她很早就完成了功課。", a: "finished" },
+                { q: "You ___ (not call) me on my birthday.", t: "你生日那天沒打電話給我。", a: "did not call" },
+                { q: "The dog ___ (bark) at the mailman.", t: "那隻狗對著郵差吠叫。", a: "barked" },
+                { q: "It ___ (not snow) last winter.", t: "去年冬天沒下雪。", a: "did not snow" },
+                { q: "We ___ (eat) pizza for dinner.", t: "我們晚餐吃了披薩。", a: "ate" },
+                { q: "He ___ (not lose) his keys.", t: "他沒有弄丟他的鑰匙。", a: "did not lose" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>All Subjects</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
         },
         future: {
             title: "Future Simple 未來簡單式",
-            usage: "Upcoming actions or predictions.",
+            usage: "Upcoming actions or predictions. / 將發生的動作或預測。",
             questions: [
-                { q: "I ___ (help) you with your bags.", a: "will help" },
-                { q: "She ___ (not forget) her umbrella.", a: "will not forget" },
-                { q: "They ___ (arrive) at 6 PM.", a: "will arrive" },
-                { q: "We ___ (not stay) late at the park.", a: "will not stay" },
-                { q: "You ___ (enjoy) the concert tonight.", a: "will enjoy" },
-                { q: "He ___ (not eat) the spicy soup.", a: "will not eat" },
-                { q: "It ___ (be) sunny tomorrow.", a: "will be" },
-                { q: "I ___ (not wear) a coat today.", a: "will not wear" },
-                { q: "The bus ___ (stop) here soon.", a: "will stop" },
-                { q: "They ___ (not play) outside if it rains.", a: "will not play" }
+                { q: "I ___ (help) you with your bags.", t: "我會幫你提包包。", a: "will help" },
+                { q: "She ___ (not forget) her umbrella.", t: "她不會忘記帶傘。", a: "will not forget" },
+                { q: "They ___ (arrive) at 6 PM.", t: "他們會在下午六點到達。", a: "will arrive" },
+                { q: "We ___ (not stay) late at the park.", t: "我們不會在公園待到很晚。", a: "will not stay" },
+                { q: "You ___ (enjoy) the concert tonight.", t: "你會喜歡今晚的音樂會。", a: "will enjoy" },
+                { q: "He ___ (not eat) the spicy soup.", t: "他不會喝這碗辣湯。", a: "will not eat" },
+                { q: "It ___ (be) sunny tomorrow.", t: "明天會是晴天。", a: "will be" },
+                { q: "I ___ (not wear) a coat today.", t: "我今天不會穿外套。", a: "will not wear" },
+                { q: "The bus ___ (stop) here soon.", t: "公車很快就會停在這裡。", a: "will stop" },
+                { q: "They ___ (not play) outside if it rains.", t: "如果下雨，他們就不會在外面玩。", a: "will not play" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>will + Verb</td><td>will not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (+)</th><th>Negative (-)</th></tr><tr><td>All Subjects</td><td>will + Verb</td><td>will not + V</td></tr></table>`
         }
     };
 
@@ -224,7 +213,8 @@
         var item = data[currentTense].questions[currentIdx];
         document.getElementById('question-area').innerHTML = `
             <p style="text-align:center; color:#666;">Question ${currentIdx + 1} of 10</p>
-            <h3 style="text-align:center; margin: 30px 0;">${item.q}</h3>
+            <h3 style="text-align:center; margin: 20px 0 10px 0;">${item.q}</h3>
+            <span class="q-translation" style="text-align:center; margin-bottom: 30px;">${item.t}</span>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
             <button onclick="next()">Submit Answer</button>`;
         document.getElementById('user-input').focus();
@@ -256,7 +246,8 @@
             <div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
                 <div class="status-icon">${isCorrect ? '✓' : '✘'}</div>
                 <div class="report-text">
-                    <strong>${q.q}</strong><br>
+                    <strong>${q.q}</strong>
+                    <span class="q-translation" style="font-size: 0.8rem; margin-top: 2px;">${q.t}</span>
                     ${isCorrect ? '<span>' + studentAnswers[i] + '</span>' : '<span class="strike">' + (studentAnswers[i] || "No Answer") + '</span><span class="fixed">Correct: ' + q.a + '</span>'}
                 </div>
             </div>`;
@@ -270,14 +261,9 @@
     function shareToSocial(platform) {
         var msg = studentName + " scored " + finalScore + "% in " + data[currentTense].title + "!";
         var url = window.location.href;
-        
-        if(platform === 'line') {
-            window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg + " " + url), '_blank');
-        } else if(platform === 'facebook') {
-            window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(msg), '_blank');
-        } else if(platform === 'whatsapp') {
-            window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg + " " + url), '_blank');
-        }
+        if(platform === 'line') window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg + " " + url), '_blank');
+        else if(platform === 'facebook') window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(msg), '_blank');
+        else if(platform === 'whatsapp') window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg + " " + url), '_blank');
     }
 </script>
 </body>
