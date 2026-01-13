@@ -8,27 +8,28 @@
     <style>
         :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 850px; padding-bottom: 80px; }
-        .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
+        .app-container { width: 100%; max-width: 850px; position: relative; padding-bottom: 80px; }
+        .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; position: relative; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 650px) { .menu-grid { grid-template-columns: 1fr; } }
-        .lesson-btn { text-align: center; padding: 20px; width: 100%; border: none; background-color: #1a73e8; color: #fff; cursor: pointer; border-radius: 12px; }
-        .btn-en { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; }
-        .btn-cn { font-size: 0.9rem; font-weight: 400; display: block; opacity: 0.9; }
+        .lesson-btn { text-align: center; padding: 20px; width: 100%; border: none; background-color: #1a73e8; color: #ffffff !important; cursor: pointer; border-radius: 12px; transition: 0.2s; }
+        .btn-en { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; color: #fff; }
+        .btn-cn { font-size: 0.9rem; font-weight: 400; display: block; color: #fff; opacity: 0.9; }
         .home-btn { position: fixed; bottom: 20px; left: 20px; background: #444; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 100; }
-        .review-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .review-item { padding: 10px; border-bottom: 1px solid #eee; margin-bottom: 5px; font-size: 0.9rem; }
         .wrong { color: var(--error); font-weight: bold; }
         .right { color: var(--success); font-weight: bold; }
+        @media print { .home-btn, .no-print { display: none !important; } .card { box-shadow: none; border: none; padding: 10px; } body { background: white; } }
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
-        .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; color: var(--primary); display: block; }
+        .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; display: block; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div id="login-card" class="card">
-        <h2 style="text-align:center;">Andrew's English Classroom</h2>
-        <input type="text" id="student-name" placeholder="Enter name / 請輸入姓名">
+        <h2 style="text-align:center;">Andrew's English <br><span style="font-size: 1.2rem; color:#666;">Online Classroom</span></h2>
+        <input type="text" id="student-name" placeholder="Enter your name / 請輸入姓名">
         <button style="width:100%; background:var(--primary); color:white; padding:15px; border-radius:8px; border:none; font-weight:bold; cursor:pointer;" onclick="goToMenu()">Enter / 進入</button>
     </div>
 
@@ -44,114 +45,205 @@
         </div>
     </div>
 
-    <div id="rule-card" class="card" style="display:none;"><div id="rule-content"></div><button style="width:100%; background: var(--success); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="startQuiz()">Start Quiz / 開始測驗</button></div>
-    <div id="quiz-container" class="card" style="display:none;"><div id="question-area"></div></div>
+    <div id="rule-card" class="card" style="display:none;">
+        <div id="rule-content"></div>
+        <button style="width:100%; background: var(--success); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="startQuiz()">Start Quiz / 開始測驗</button>
+        <button class="home-btn" onclick="backToMenu()">🏠 Home</button>
+    </div>
+
+    <div id="quiz-container" class="card" style="display:none;">
+        <div id="question-area"></div>
+        <button class="home-btn" onclick="backToMenu()">🏠 Home</button>
+    </div>
 
     <div id="results-container" class="card" style="display:none;">
         <h2 style="text-align:center;">Results / 測驗結果</h2>
         <div id="score-summary" style="text-align:center; font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: var(--primary);"></div>
         <div id="review-list"></div>
-        <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="backToMenu()">Try Another Lesson</button>
+        <div class="no-print" style="margin-top: 25px;">
+            <button style="width:100%; background: #ff9800; color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom: 10px;" onclick="window.print()">📸 Save Score (Screenshot/PDF)</button>
+            <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="backToMenu()">Try Another Lesson</button>
+        </div>
+        <button class="home-btn" onclick="backToMenu()">🏠 Home</button>
     </div>
-    <button id="global-home" class="home-btn" style="display:none;" onclick="backToMenu()">🏠 Home</button>
 </div>
 
 <script>
-    var studentName = "", currentTense = "", currentIdx = 0, score = 0, studentHistory = [];
+    var studentName = "";
+    var currentTense = "";
+    var currentIdx = 0;
+    var score = 0;
+    var studentHistory = [];
+
     var data = {
-        presentSimple: { title: "Present Simple", questions: [
-            {q: "He ___ (drink) milk every day.", a: "drinks"}, {q: "They ___ (not like) apples.", a: "do not like"},
-            {q: "She ___ (study) English.", a: "studies"}, {q: "I ___ (not play) soccer.", a: "do not play"},
-            {q: "The cat ___ (sleep) on the sofa.", a: "sleeps"}, {q: "Water ___ (boil) at 100°C.", a: "boils"},
-            {q: "We ___ (not live) in Taipei.", a: "do not live"}, {q: "He ___ (wash) his car.", a: "washes"},
-            {q: "You ___ (not speak) French.", a: "do not speak"}, {q: "The sun ___ (rise) in the east.", a: "rises"}
-        ]},
-        pastSimple: { title: "Past Simple", questions: [
-            {q: "I ___ (visit) Japan last year.", a: "visited"}, {q: "They ___ (not go) to school yesterday.", a: "did not go"},
-            {q: "She ___ (see) a movie last night.", a: "saw"}, {q: "He ___ (not eat) his lunch.", a: "did not eat"},
-            {q: "We ___ (play) tennis on Sunday.", a: "played"}, {q: "The bus ___ (stop) here 5 mins ago.", a: "stopped"},
-            {q: "You ___ (not call) me last night.", a: "did not call"}, {q: "I ___ (buy) a new phone.", a: "bought"},
-            {q: "They ___ (finish) the homework.", a: "finished"}, {q: "It ___ (not rain) yesterday.", a: "did not rain"}
-        ]},
-        futureSimple: { title: "Future Simple", questions: [
-            {q: "I ___ (help) you tomorrow.", a: "will help"}, {q: "They ___ (not come) to the party.", a: "will not come"},
-            {q: "She ___ (travel) to London.", a: "will travel"}, {q: "We ___ (not forget) the keys.", a: "will not forget"},
-            {q: "He ___ (buy) a car next year.", a: "will buy"}, {q: "It ___ (be) sunny on Friday.", a: "will be"},
-            {q: "You ___ (love) this movie.", a: "will love"}, {q: "I ___ (not watch) TV tonight.", a: "will not watch"},
-            {q: "They ___ (win) the match.", a: "will win"}, {q: "She ___ (not call) him again.", a: "will not call"}
-        ]},
-        presentContinuous: { title: "Present Continuous", questions: [
-            {q: "I ___ (read) a book now.", a: "am reading"}, {q: "They ___ (not dance) right now.", a: "are not dancing"},
-            {q: "She ___ (cook) dinner.", a: "is cooking"}, {q: "It ___ (rain) outside.", a: "is raining"},
-            {q: "We ___ (not watch) a movie.", a: "are not watching"}, {q: "You ___ (listen) to music.", a: "are listening"},
-            {q: "He ___ (not work) today.", a: "is not working"}, {q: "The dog ___ (bark) at the cat.", a: "is barking"},
-            {q: "I ___ (not cry) right now.", a: "am not crying"}, {q: "They ___ (play) basketball.", a: "are playing"}
-        ]},
-        pastContinuous: { title: "Past Continuous", questions: [
-            {q: "I ___ (eat) dinner at 7 PM.", a: "was eating"}, {q: "They ___ (not study) then.", a: "were not studying"},
-            {q: "She ___ (sleep) when you called.", a: "was sleeping"}, {q: "We ___ (walk) in the park.", a: "were walking"},
-            {q: "He ___ (not drive) fast.", a: "was not driving"}, {q: "You ___ (sing) a song.", a: "were singing"},
-            {q: "It ___ (snow) last night.", a: "was snowing"}, {q: "The kids ___ (play) outside.", a: "were playing"},
-            {q: "I ___ (not feel) well then.", a: "was not feeling"}, {q: "The birds ___ (fly) south.", a: "were flying"}
-        ]},
-        futureContinuous: { title: "Future Continuous", questions: [
-            {q: "I ___ (wait) for you at 5 PM.", a: "will be waiting"}, {q: "They ___ (not work) at 10 PM.", a: "will not be working"},
-            {q: "She ___ (fly) to Paris.", a: "will be flying"}, {q: "We ___ (have) lunch at noon.", a: "will be having"},
-            {q: "He ___ (not sleep) on the flight.", a: "will not be sleeping"}, {q: "You ___ (study) all night.", a: "will be studying"},
-            {q: "It ___ (rain) tomorrow morning.", a: "will be raining"}, {q: "I ___ (not use) the laptop then.", a: "will not be using"},
-            {q: "They ___ (swim) in the ocean.", a: "will be swimming"}, {q: "She ___ (wear) a red dress.", a: "will be wearing"}
-        ]}
+        presentSimple: {
+            title: "Present Simple 現在簡單式",
+            questions: [
+                {q: "He ___ (drink) milk every day.", a: "drinks"},
+                {q: "They ___ (not like) apples.", a: "do not like"},
+                {q: "She ___ (study) English.", a: "studies"},
+                {q: "I ___ (not play) soccer.", a: "do not play"},
+                {q: "The cat ___ (sleep) on the sofa.", a: "sleeps"},
+                {q: "Water ___ (boil) at 100°C.", a: "boils"},
+                {q: "We ___ (not live) in Taipei.", a: "do not live"},
+                {q: "He ___ (wash) his car every week.", a: "washes"},
+                {q: "You ___ (not speak) French.", a: "do not speak"},
+                {q: "The sun ___ (rise) in the east.", a: "rises"}
+            ]
+        },
+        pastSimple: {
+            title: "Past Simple 過去簡單式",
+            questions: [
+                {q: "I ___ (visit) Japan last year.", a: "visited"},
+                {q: "They ___ (not go) to school yesterday.", a: "did not go"},
+                {q: "She ___ (see) a movie last night.", a: "saw"},
+                {q: "He ___ (not eat) his lunch.", a: "did not eat"},
+                {q: "We ___ (play) tennis on Sunday.", a: "played"},
+                {q: "The bus ___ (stop) here 5 minutes ago.", a: "stopped"},
+                {q: "You ___ (not call) me last night.", a: "did not call"},
+                {q: "I ___ (buy) a new phone.", a: "bought"},
+                {q: "They ___ (finish) the homework.", a: "finished"},
+                {q: "It ___ (not rain) yesterday.", a: "did not rain"}
+            ]
+        },
+        futureSimple: {
+            title: "Future Simple 未來簡單式",
+            questions: [
+                {q: "I ___ (help) you tomorrow.", a: "will help"},
+                {q: "They ___ (not come) to the party.", a: "will not come"},
+                {q: "She ___ (travel) to London next month.", a: "will travel"},
+                {q: "We ___ (not forget) the keys.", a: "will not forget"},
+                {q: "He ___ (buy) a house next year.", a: "will buy"},
+                {q: "It ___ (be) sunny on Friday.", a: "will be"},
+                {q: "You ___ (love) this movie.", a: "will love"},
+                {q: "I ___ (not watch) TV tonight.", a: "will not watch"},
+                {q: "They ___ (win) the match.", a: "will win"},
+                {q: "She ___ (not call) him again.", a: "will not call"}
+            ]
+        },
+        presentContinuous: {
+            title: "Present Continuous 現在進行式",
+            questions: [
+                {q: "I ___ (read) a book now.", a: "am reading"},
+                {q: "They ___ (not dance) right now.", a: "are not dancing"},
+                {q: "She ___ (cook) dinner in the kitchen.", a: "is cooking"},
+                {q: "It ___ (rain) outside.", a: "is raining"},
+                {q: "We ___ (not watch) a movie.", a: "are not watching"},
+                {q: "You ___ (listen) to music.", a: "are listening"},
+                {q: "He ___ (not work) today.", a: "is not working"},
+                {q: "The dog ___ (bark) at the cat.", a: "is barking"},
+                {q: "I ___ (not cry) right now.", a: "am not crying"},
+                {q: "They ___ (play) basketball.", a: "are playing"}
+            ]
+        },
+        pastContinuous: {
+            title: "Past Continuous 過去進行式",
+            questions: [
+                {q: "I ___ (eat) dinner at 7 PM yesterday.", a: "was eating"},
+                {q: "They ___ (not study) when I arrived.", a: "were not studying"},
+                {q: "She ___ (sleep) when you called.", a: "was sleeping"},
+                {q: "We ___ (walk) in the park.", a: "were walking"},
+                {q: "He ___ (not drive) fast.", a: "was not driving"},
+                {q: "You ___ (sing) on stage.", a: "were singing"},
+                {q: "It ___ (snow) last night.", a: "was snowing"},
+                {q: "The kids ___ (play) outside.", a: "were playing"},
+                {q: "I ___ (not feeling) well then.", a: "was not feeling"},
+                {q: "The birds ___ (fly) south.", a: "were flying"}
+            ]
+        },
+        futureContinuous: {
+            title: "Future Continuous 未來進行式",
+            questions: [
+                {q: "I ___ (wait) for you at 5 PM.", a: "will be waiting"},
+                {q: "They ___ (not work) at 10 PM.", a: "will not be working"},
+                {q: "She ___ (fly) to Paris this time tomorrow.", a: "will be flying"},
+                {q: "We ___ (have) lunch at noon.", a: "will be having"},
+                {q: "He ___ (not sleep) during the flight.", a: "will not be sleeping"},
+                {q: "You ___ (study) all night tonight.", a: "will be studying"},
+                {q: "It ___ (rain) by the time you arrive.", a: "will be raining"},
+                {q: "I ___ (not use) the laptop then.", a: "will not be using"},
+                {q: "They ___ (swim) in the ocean.", a: "will be swimming"},
+                {q: "She ___ (wear) a red dress tonight.", a: "will be wearing"}
+            ]
+        }
     };
 
-    function normalize(s) {
-        return s.toLowerCase().trim().replace(/[‘’]/g, "'").replace(/\bdon't\b/g, "do not").replace(/\bdoesn't\b/g, "does not").replace(/\bdidn't\b/g, "did not").replace(/\bwon't\b/g, "will not").replace(/\bisn't\b/g, "is not").replace(/\baren't\b/g, "are not").replace(/\bwasn't\b/g, "was not").replace(/\bweren't\b/g, "were not").replace(/\bi'm\b/g, "i am").replace(/\s+/g, ' ');
+    function normalize(text) {
+        if (!text) return "";
+        let s = text.replace(/[‘’]/g, "'").toLowerCase().trim();
+        // Expand common contractions to match the full forms in data
+        s = s.replace(/\bdon't\b/g, "do not").replace(/\bdoesn't\b/g, "does not").replace(/\bdidn't\b/g, "did not");
+        s = s.replace(/\bwon't\b/g, "will not").replace(/\bisn't\b/g, "is not").replace(/\baren't\b/g, "are not");
+        s = s.replace(/\bwasn't\b/g, "was not").replace(/\bweren't\b/g, "were not").replace(/\bi'm\b/g, "i am");
+        s = s.replace(/\bi'll\b/g, "i will").replace(/\bshe's\b/g, "she is").replace(/\bhe's\b/g, "he is");
+        return s.replace(/\s+/g, ' ');
     }
+
     function goToMenu() {
-        studentName = document.getElementById('student-name').value.trim();
-        if (!studentName) return;
+        let name = document.getElementById('student-name').value.trim();
+        if (!name) return;
+        studentName = name;
         document.getElementById('login-card').style.display = "none";
         document.getElementById('menu-card').style.display = "block";
         document.getElementById('welcome-msg').innerText = "Student: " + studentName;
     }
+
     function backToMenu() {
         currentIdx = 0; score = 0; studentHistory = [];
         document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
         document.getElementById('menu-card').style.display = 'block';
-        document.getElementById('global-home').style.display = 'none';
     }
-    function loadTense(t) {
-        currentTense = t;
-        document.getElementById('rule-content').innerHTML = `<h2>${data[t].title}</h2><p>Practice both affirmative (+) and negative (-) forms.</p>`;
+
+    function loadTense(tense) {
+        currentTense = tense;
+        document.getElementById('rule-content').innerHTML = `<h2>${data[tense].title}</h2><p>Practice both affirmative (+) and negative (-) forms.</p>`;
         document.getElementById('menu-card').style.display = 'none';
         document.getElementById('rule-card').style.display = 'block';
-        document.getElementById('global-home').style.display = 'block';
     }
+
     function startQuiz() {
         document.getElementById('rule-card').style.display = 'none';
         document.getElementById('quiz-container').style.display = 'block';
         showQuestion();
     }
+
     function showQuestion() {
         let item = data[currentTense].questions[currentIdx];
-        document.getElementById('question-area').innerHTML = `<span class="status-msg">Question ${currentIdx+1} / 10</span><h3 style="text-align:center;">${item.q}</h3><input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()"><button style="width:100%; background:var(--primary); color:white; padding:15px; border-radius:8px; border:none; font-weight:bold; cursor:pointer;" onclick="next()">Submit</button>`;
+        document.getElementById('question-area').innerHTML = `
+            <span class="status-msg">Question ${currentIdx+1} / 10</span>
+            <h3 style="text-align:center;">${item.q}</h3>
+            <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
+            <button style="width:100%; background:var(--primary); color:white; padding:15px; border-radius:8px; border:none; font-weight:bold; cursor:pointer;" onclick="next()">Submit</button>
+        `;
         document.getElementById('user-input').focus();
     }
+
     function next() {
-        let raw = document.getElementById('user-input').value;
-        let correct = data[currentTense].questions[currentIdx].a;
-        let isCorrect = normalize(raw) === normalize(correct);
+        let rawAns = document.getElementById('user-input').value;
+        let correctAns = data[currentTense].questions[currentIdx].a;
+        let isCorrect = normalize(rawAns) === normalize(correctAns);
+        
         if (isCorrect) score++;
-        studentHistory.push({ q: data[currentTense].questions[currentIdx].q, user: raw, correct: correct, status: isCorrect });
+        studentHistory.push({ q: data[currentTense].questions[currentIdx].q, user: rawAns, correct: correctAns, status: isCorrect });
+
         currentIdx++;
         if (currentIdx < 10) showQuestion(); else showResults();
     }
+
     function showResults() {
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
         document.getElementById('score-summary').innerText = studentName + " - " + (score * 10) + "%";
-        let h = "<h3>Review Details:</h3>";
-        studentHistory.forEach(i => { h += `<div class="review-item"><strong>${i.q}</strong><br>Your Answer: <span class="${i.status?'right':'wrong'}">${i.user||"(Empty)"}</span><br>${!i.status?'Correct Answer: <span class="right">'+i.correct+'</span>':''}</div>`; });
-        document.getElementById('review-list').innerHTML = h;
+        
+        let reviewHtml = "<h3>Review Details:</h3>";
+        studentHistory.forEach(item => {
+            reviewHtml += `<div class="review-item">
+                <strong>${item.q}</strong><br>
+                Your Answer: <span class="${item.status ? 'right' : 'wrong'}">${item.user || "(Empty)"}</span><br>
+                ${!item.status ? 'Correct Answer: <span class="right">' + item.correct + '</span>' : ''}
+            </div>`;
+        });
+        document.getElementById('review-list').innerHTML = reviewHtml;
     }
 </script>
 </body>
