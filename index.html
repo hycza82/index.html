@@ -14,18 +14,20 @@
         .school-header { text-align: center; margin-bottom: 30px; padding-top: 10px; display: flex; justify-content: center; }
         .school-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; display: block; }
         
-        .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
+        .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; position: relative; }
         
-        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; }
-        .lesson-btn .cn-text { font-size: 0.9rem; font-weight: 400; opacity: 0.9; }
+        /* Tense Badge in Quiz */
+        .tense-indicator { font-size: 0.85rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+
+        .lesson-btn { text-align: left; padding: 20px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 8px; }
+        .lesson-btn:hover { background: #f0f7ff; border-color: var(--primary); }
+        .lesson-btn .cn-text { font-size: 0.9rem; font-weight: 400; color: #666; }
 
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; background: #fff; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; line-height: 1.4; }
-        .highlight { color: #d93025; font-weight: bold; text-decoration: underline; }
         
-        /* Question Translation Styling */
         .q-translation { display: block; font-size: 1rem; color: #666; font-weight: 400; margin-top: 5px; line-height: 1.4; }
         .lang-label { font-size: 0.8rem; color: #666; display: block; margin-top: 2px; }
 
@@ -138,7 +140,7 @@
                 { q: "It ___ (rain) a lot in April.", t: "四月常下雨。", a: "rains" },
                 { q: "Birds ___ (not fly) south in the summer.", t: "鳥類在夏天不會飛往南方。", a: "do not fly" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Base Verb</td><td>do not + V</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>I / You / We / They</td><td>Base Verb</td><td>do not + Verb</td></tr><tr><td>He / She / It</td><td>Verb + s/es</td><td>does not + Verb</td></tr></table>`
         },
         past: {
             title: "Past Simple 過去簡單式",
@@ -155,7 +157,7 @@
                 { q: "We ___ (eat) pizza for dinner.", t: "我們晚餐吃了披薩。", a: "ate" },
                 { q: "He ___ (not lose) his keys.", t: "他沒有弄丟他的鑰匙。", a: "did not lose" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>Verb + ed</td><td>did not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>All Subjects</td><td>Verb + ed</td><td>did not + Verb</td></tr></table>`
         },
         future: {
             title: "Future Simple 未來簡單式",
@@ -172,7 +174,7 @@
                 { q: "The bus ___ (stop) here soon.", t: "公車很快就會停在這裡。", a: "will stop" },
                 { q: "They ___ (not play) outside if it rains.", t: "如果下雨，他們就不會在外面玩。", a: "will not play" }
             ],
-            table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>All</td><td>will + V</td><td>will not + V</td></tr></table>`
+            table: `<table class="rule-table"><tr><th>Subject (主詞)</th><th>Affirmative (肯定)</th><th>Negative (否定)</th></tr><tr><td>All Subjects</td><td>will + Verb</td><td>will not + Verb</td></tr></table>`
         }
     };
 
@@ -214,8 +216,10 @@
 
     function showQuestion() {
         var item = data[currentTense].questions[currentIdx];
+        var tenseTitle = data[currentTense].title;
         document.getElementById('question-area').innerHTML = `
-            <p style="text-align:center; color:#666;">Question ${currentIdx + 1} of 10</p>
+            <div class="tense-indicator" style="text-align:center;">Testing: ${tenseTitle}</div>
+            <p style="text-align:center; color:#666; font-size: 0.8rem;">Question ${currentIdx + 1} of 10</p>
             <h3 style="text-align:center; margin-bottom: 5px;">${item.q}</h3>
             <span class="q-translation" style="text-align:center; margin-bottom: 25px;">${item.t}</span>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
