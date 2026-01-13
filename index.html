@@ -10,24 +10,19 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 700px; }
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
-        
         .school-header { text-align: center; margin-bottom: 30px; }
         .school-logo { max-width: 120px; height: auto; margin-bottom: 10px; border-radius: 8px; }
         .school-name { color: var(--primary); margin: 0; font-size: 2.2rem; font-weight: 700; }
-        
         .lang-ch { display: block; color: #666; font-size: 0.9rem; font-weight: normal; margin-top: 4px; }
         .formula-box { background: #f1f3f4; padding: 20px; border-left: 5px solid var(--primary); border-radius: 4px; margin: 20px 0; font-weight: 600; }
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; }
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
-        button:hover { filter: brightness(0.9); }
-        
         .report-row { padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid; }
         .report-row.correct { background: #e6fffa; border-color: var(--success); }
         .report-row.incorrect { background: #fff5f5; border-color: var(--error); }
         .strike { text-decoration: line-through; color: var(--error); margin-right: 10px; }
         .fixed { color: var(--success); font-weight: bold; }
         .audio-btn { width: auto; padding: 8px 15px; background: #e8f0fe; color: var(--primary); font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        
         @media print { .no-print { display: none; } body { padding: 0; } .card { box-shadow: none; border: none; } }
     </style>
 </head>
@@ -182,19 +177,34 @@
         if (currentIdx < 10) showQuestion(); else showResults();
     }
 
+    function normalize(text) {
+        if (!text) return "";
+        return text.toLowerCase()
+                   .trim()
+                   .replace("don't", "do not")
+                   .replace("didn't", "did not")
+                   .replace("won't", "will not")
+                   .replace("doesn't", "does not")
+                   .replace("isn't", "is not")
+                   .replace("aren't", "are not")
+                   .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); // Also removes punctuation
+    }
+
     function showResults() {
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
         let score = 0;
         let html = "";
+        
         data[currentTense].questions.forEach((q, i) => {
-            const isCorrect = studentAnswers[i].trim().toLowerCase() === q.a.toLowerCase();
+            const isCorrect = normalize(studentAnswers[i]) === normalize(q.a);
             if(isCorrect) score++;
             html += `<div class="report-row ${isCorrect ? 'correct' : 'incorrect'}">
                 <strong>${q.q}</strong><br>
-                ${isCorrect ? `✓ ${q.a}` : `<span class="strike">${studentAnswers[i] || "Empty"}</span> <span class="fixed">${q.a}</span>`}
+                ${isCorrect ? `✓ ${studentAnswers[i]}` : `<span class="strike">${studentAnswers[i] || "Empty"}</span> <span class="fixed">${q.a}</span>`}
             </div>`;
         });
+        
         document.getElementById('result-title').innerText = `${studentName}'s Report: ${data[currentTense].title}`;
         document.getElementById('score-summary').innerHTML = `<h3>Grade: ${score * 10}% (${score}/10)</h3>`;
         document.getElementById('report-list').innerHTML = html;
