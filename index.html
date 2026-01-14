@@ -10,55 +10,31 @@
         :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --line: #06C755; --fb: #1877F2; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 850px; position: relative; padding-bottom: 80px; }
-        
         .school-header { text-align: center; margin-bottom: 20px; display: flex; justify-content: center; }
         .school-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; }
-        
         .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; position: relative; }
-        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 650px) { .menu-grid { grid-template-columns: 1fr; } }
-
-        .lesson-btn { 
-            text-align: center; padding: 20px; width: 100%; border: none; 
-            background-color: #1a73e8; color: #ffffff !important; 
-            cursor: pointer; border-radius: 12px; transition: 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+        .lesson-btn { text-align: center; padding: 20px; width: 100%; border: none; background-color: #1a73e8; color: #ffffff !important; cursor: pointer; border-radius: 12px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .lesson-btn:hover { background-color: #1557b0; transform: translateY(-2px); }
         .btn-en { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; }
         .btn-cn { font-size: 0.9rem; font-weight: 400; display: block; opacity: 0.9; }
-
-        .home-btn { 
-            position: fixed; bottom: 20px; left: 20px; 
-            background: #444; color: white; border: none; 
-            padding: 12px 20px; border-radius: 30px; 
-            font-weight: bold; cursor: pointer; z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
+        .home-btn { position: fixed; bottom: 20px; left: 20px; background: #444; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .usage-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .rule-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
         .rule-table th { background-color: #f1f3f4; color: var(--primary); padding: 12px; border: 1px solid #ddd; text-align: left; }
         .rule-table td { border: 1px solid #ddd; padding: 12px; vertical-align: top; }
-        
         input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
         .status-msg { font-weight: bold; text-align: center; margin-bottom: 10px; display: block; color: var(--primary); }
-
-        /* Social, Modal & Save */
         .share-container { display: flex; gap: 10px; margin: 15px 0; }
         .share-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-line { background-color: var(--line); }
         .btn-fb { background-color: var(--fb); }
         .btn-save { background-color: #ff9800; width: 100%; margin-bottom: 10px; padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
-        .btn-logout { background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-top: 10px; }
-
-        /* Review Styles */
         .review-item { border-bottom: 1px solid #eee; padding: 15px 0; text-align: left; }
         .review-q { font-weight: 600; color: #333; margin-bottom: 5px; }
         .correct-ans { color: var(--success); font-weight: bold; }
         .wrong-ans { color: var(--error); text-decoration: line-through; margin-right: 10px; }
-
         #rules-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: white; margin: 10% auto; padding: 30px; width: 90%; max-width: 650px; border-radius: 16px; position: relative; max-height: 80vh; overflow-y: auto; }
         .close-modal { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
@@ -85,10 +61,9 @@
         <button style="width:100%; background:var(--primary); color:white; padding:15px; border-radius:8px; border:none; font-weight:bold; cursor:pointer;" onclick="goToMenu()">Enter Classroom / 進入教室</button>
     </div>
 
-    <div id="menu-card" class="card" style="display:none; text-align: center;">
-        <h3 id="welcome-msg" style="color: var(--primary); margin-bottom: 5px;"></h3>
-        <button class="btn-logout" onclick="logout()">Logout / 登出</button>
-        <h2 style="margin: 20px 0;">Select a Lesson / 選擇課程</h2>
+    <div id="menu-card" class="card" style="display:none;">
+        <h3 id="welcome-msg" style="color: var(--primary); text-align: center; margin-bottom: 10px;"></h3>
+        <h2 style="text-align: center; margin-bottom: 20px;">Select a Lesson / 選擇課程</h2>
         <div class="menu-grid">
             <button class="lesson-btn" onclick="loadTense('presentSimple')"><span class="btn-en">Present Simple</span><span class="btn-cn">現在簡單式</span></button>
             <button class="lesson-btn" onclick="loadTense('pastSimple')"><span class="btn-en">Past Simple</span><span class="btn-cn">過去簡單式</span></button>
@@ -111,31 +86,43 @@
     </div>
 
     <div id="results-container" class="card" style="display:none;">
-        <div id="capture-area" style="background: white; padding: 20px; border-radius: 12px;">
-            <h2 style="text-align:center;">Andrew's English | Report Card</h2>
-            <div id="score-summary" style="text-align:center; font-size: 1.2rem; margin: 20px 0; font-weight: bold; color: var(--primary); border: 2px dashed #ddd; padding: 20px;"></div>
+        <div id="capture-area" style="background: white; padding: 20px; border-radius: 12px; text-align:center;">
+            <h2>Andrew's English | Report Card</h2>
+            <div id="score-summary" style="font-size: 1.2rem; margin: 20px 0; font-weight: bold; color: var(--primary); border: 2px dashed #ddd; padding: 20px;"></div>
         </div>
         
-        <button class="btn-save" onclick="saveAsJpeg()">📸 Save Test Result (JPEG) / 儲存照片</button>
+        <button class="btn-save" onclick="saveAsJpeg()">📸 Save as Photo (Long-press on mobile)</button>
 
         <div class="share-container">
             <button class="share-btn btn-line" onclick="shareResult('line')">LINE 分享</button>
             <button class="share-btn btn-fb" onclick="shareResult('fb')">Facebook</button>
         </div>
 
-        <div id="answer-review" style="margin-top: 30px;">
-            <h3 style="border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Detailed Review / 考題複習</h3>
+        <div id="answer-review" style="margin-top:30px;">
+            <h3 style="border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Detailed Review / 複習</h3>
             <div id="review-list"></div>
         </div>
 
-        <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top: 20px;" onclick="backToMenu()">Try Another Lesson</button>
+        <button style="width:100%; background: var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:20px;" onclick="backToMenu()">Try Another Lesson</button>
         <button class="home-btn" onclick="backToMenu()">🏠 Back to Home</button>
     </div>
 </div>
 
 <script>
-    var studentName = "", currentTense = "", currentIdx = 0, score = 0;
-    var userAnswers = []; // Added to track answers for review
+    var studentName = "", currentTense = "", currentIdx = 0, score = 0, userAnswers = [];
+
+    // Helper to allow contractions like won't = will not
+    function clean(text) {
+        if (!text) return "";
+        return text.toLowerCase().trim()
+            .replace(/n't/g, " not")
+            .replace(/won't/g, "will not")
+            .replace(/'ll/g, " will")
+            .replace(/'m/g, " am")
+            .replace(/'re/g, " are")
+            .replace(/'s/g, " is")
+            .replace(/[.,!?;:]/g, "");
+    }
 
     var data = {
         presentSimple: {
@@ -182,13 +169,13 @@
                 {q: "It ___ (not rain) yesterday.", t: "昨天沒下雨。", a: "did not rain"},
                 {q: "I ___ (find) a wallet.", t: "我發現一個皮夾。", a: "found"},
                 {q: "We ___ (not see) the accident.", t: "我們沒看到事故。", a: "did not see"},
-                {q: "She ___ (lose) her keys.", t: "她弄丟了鑰匙。", a: "lost"},
+                {q: "She ___ (lost) her keys.", t: "她弄丟了鑰匙。", a: "lost"},
                 {q: "He ___ (not tell) me.", t: "他沒告訴我。", a: "did not tell"},
-                {q: "They ___ (win) the game.", t: "他們贏了比賽。", a: "won"},
+                {q: "They ___ (won) the game.", t: "他們贏了比賽。", a: "won"},
                 {q: "You ___ (not sleep) well.", t: "你沒睡好。", a: "did not sleep"},
-                {q: "I ___ (drink) some juice.", t: "我喝了一些果汁。", a: "drank"},
+                {q: "I ___ (drank) some juice.", t: "我喝了一些果汁。", a: "drank"},
                 {q: "We ___ (not leave) late.", t: "我們沒太晚離開。", a: "did not leave"},
-                {q: "It ___ (be) cold.", t: "天氣很冷。", a: "was"},
+                {q: "It ___ (was) cold.", t: "天氣很冷。", a: "was"},
                 {q: "He ___ (not write) a letter.", t: "他沒寫信。", a: "did not write"}
             ]
         },
@@ -237,13 +224,13 @@
                 {q: "She ___ (sleep).", t: "她正在睡覺。", a: "is sleeping"},
                 {q: "We ___ (not wait).", t: "我們沒在等。", a: "are not waiting"},
                 {q: "You ___ (drive).", t: "你正在開車。", a: "are driving"},
-                {q: "He ___ (not listen).", t: "他沒在聽。", a: "is not listening"},
+                {q: "He ___ (not listening).", t: "他沒在聽。", a: "is not listening"},
                 {q: "It ___ (get) dark.", t: "天快黑了。", a: "is getting"},
-                {q: "They ___ (not swim).", t: "他們沒在游泳。", a: "are not swimming"},
-                {q: "I ___ (write).", t: "我正在寫字。", a: "am writing"},
-                {q: "She ___ (not sing).", t: "她沒在唱歌。", a: "is not singing"},
-                {q: "We ___ (learn).", t: "我們正在學習。", a: "are learning"},
-                {q: "The cat ___ (run).", t: "貓正在跑。", a: "is running"}
+                {q: "They ___ (not swimming).", t: "他們沒在游泳。", a: "are not swimming"},
+                {q: "I ___ (writing).", t: "我正在寫字。", a: "am writing"},
+                {q: "She ___ (not singing).", t: "她沒在唱歌。", a: "is not singing"},
+                {q: "We ___ (learning).", t: "我們正在學習。", a: "are learning"},
+                {q: "The cat ___ (running).", t: "貓正在跑。", a: "is running"}
             ]
         },
         pastContinuous: {
@@ -258,19 +245,19 @@
                 {q: "He ___ (not drive).", t: "他那時沒在開車。", a: "was not driving"},
                 {q: "You ___ (sing).", t: "你那時在唱歌。", a: "were singing"},
                 {q: "It ___ (snow) last night.", t: "昨晚那時在下雪。", a: "was snowing"},
-                {q: "I ___ (not feel) well.", t: "我那時感覺不舒服。", a: "was not feeling"},
-                {q: "They ___ (work) hard.", t: "他們那時在努力工作。", a: "were working"},
-                {q: "The sun ___ (shine).", t: "那時陽光普照。", a: "was shining"},
-                {q: "I ___ (not look).", t: "我那時沒在看。", a: "was not looking"},
-                {q: "We ___ (have) fun.", t: "我們那時玩得很開心。", a: "were having"},
-                {q: "He ___ (talk) to her.", t: "他那時在跟她說話。", a: "was talking"},
-                {q: "They ___ (not wait).", t: "他們那時沒在等。", a: "were not waiting"},
-                {q: "She ___ (clean).", t: "她那時在打掃。", a: "was cleaning"},
-                {q: "You ___ (not help).", t: "你那時沒在幫忙。", a: "were not helping"},
-                {q: "It ___ (rain).", t: "那時在下雨。", a: "was raining"},
-                {q: "We ___ (study).", t: "我們那時在讀書。", a: "were studying"},
-                {q: "He ___ (not wear) a hat.", t: "他那時沒戴帽子。", a: "was not wearing"},
-                {q: "I ___ (wait) for you.", t: "我那時在等你。", a: "was waiting"}
+                {q: "I ___ (not feeling) well.", t: "我那時感覺不舒服。", a: "was not feeling"},
+                {q: "They ___ (working) hard.", t: "他們那時在努力工作。", a: "were working"},
+                {q: "The sun ___ (shining).", t: "那時陽光普照。", a: "was shining"},
+                {q: "I ___ (not looking).", t: "我那時沒在看。", a: "was not looking"},
+                {q: "We ___ (having) fun.", t: "我們那時玩得很開心。", a: "were having"},
+                {q: "He ___ (talking) to her.", t: "他那時在跟她說話。", a: "was talking"},
+                {q: "They ___ (not waiting).", t: "他們那時沒在等。", a: "were not waiting"},
+                {q: "She ___ (cleaning).", t: "她那時在打掃。", a: "was cleaning"},
+                {q: "You ___ (not helping).", t: "你那時沒在幫忙。", a: "were not helping"},
+                {q: "It ___ (raining).", t: "那時在下雨。", a: "was raining"},
+                {q: "We ___ (studying).", t: "我們那時在讀書。", a: "were studying"},
+                {q: "He ___ (not wearing) a hat.", t: "他那時沒戴帽子。", a: "was not wearing"},
+                {q: "I ___ (waiting) for you.", t: "我那時在等你。", a: "was waiting"}
             ]
         },
         futureContinuous: {
@@ -288,16 +275,16 @@
                 {q: "I ___ (not use) the laptop.", t: "我到時將不在用筆電。", a: "will not be using"},
                 {q: "They ___ (swim) in the sea.", t: "他們到時將在海裡游泳。", a: "will be swimming"},
                 {q: "She ___ (wear) a red dress.", t: "她到時將穿著紅裙子。", a: "will be wearing"},
-                {q: "I ___ (drive).", t: "我那時會正在開車。", a: "will be driving"},
-                {q: "We ___ (not dance).", t: "我們那時不會正在跳舞。", a: "will not be dancing"},
-                {q: "He ___ (meet) her.", t: "他到時會正跟她見面。", a: "will be meeting"},
-                {q: "You ___ (not stay).", t: "你到時不會待在那。", a: "will not be staying"},
-                {q: "They ___ (play) soccer.", t: "他們到時會正踢足球。", a: "will be playing"},
-                {q: "It ___ (snow).", t: "那時會正在下雪。", a: "will be snowing"},
-                {q: "I ___ (not cry).", t: "我那時不會正在哭。", a: "will not be crying"},
-                {q: "She ___ (watch) TV.", t: "她到時會正在看電視。", a: "will be watching"},
-                {q: "We ___ (walk) home.", t: "我們那時會正走路回家。", a: "will be walking"},
-                {q: "He ___ (work) hard.", t: "他那時會正在努力工作。", a: "will be working"}
+                {q: "I ___ (driving).", t: "我那時會正在開車。", a: "will be driving"},
+                {q: "We ___ (not dancing).", t: "我們那時不會正在跳舞。", a: "will not be dancing"},
+                {q: "He ___ (meeting) her.", t: "他到時會正跟她見面。", a: "will be meeting"},
+                {q: "You ___ (not staying).", t: "你到時不會待在那。", a: "will not be staying"},
+                {q: "They ___ (playing) soccer.", t: "他們到時會正踢足球。", a: "will be playing"},
+                {q: "It ___ (snowing).", t: "那時會正在下雪。", a: "will be snowing"},
+                {q: "I ___ (not crying).", t: "我那時不會正在哭。", a: "will not be crying"},
+                {q: "She ___ (watching) TV.", t: "她到時會正在看電視。", a: "will be watching"},
+                {q: "We ___ (walking) home.", t: "我們那時會正走路回家。", a: "will be walking"},
+                {q: "He ___ (working) hard.", t: "他那時會正在努力工作。", a: "will be working"}
             ]
         }
     };
@@ -323,14 +310,6 @@
         document.getElementById('welcome-msg').innerText = "Welcome, " + studentName + "!";
     }
 
-    // New Logout Function
-    function logout() {
-        studentName = "";
-        document.getElementById('student-name').value = "";
-        document.getElementById('menu-card').style.display = "none";
-        document.getElementById('login-card').style.display = "block";
-    }
-
     function backToMenu() {
         currentIdx = 0; score = 0; userAnswers = [];
         document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
@@ -351,53 +330,32 @@
         showQuestion();
     }
 
-function showQuestion() {
+    function showQuestion() {
         var total = data[currentTense].questions.length;
         var item = data[currentTense].questions[currentIdx];
-        var tenseTitle = data[currentTense].title; // Gets the title from your data object
-
         document.getElementById('question-area').innerHTML = `
-            <div style="text-align:center; margin-bottom: 15px;">
-                <small style="color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Current Tense:</small>
-                <div style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">${tenseTitle}</div>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid #eee; pt-3; padding-top: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span class="status-msg">Q${currentIdx+1}/${total}</span>
                 <button class="review-rules-btn" onclick="toggleModal(true)">📖 Review Rules</button>
             </div>
-            <h3 style="text-align:center; margin-top: 20px;">${item.q}</h3>
+            <h3 style="text-align:center;">${item.q}</h3>
             <p style="text-align:center; color:#666;">${item.t}</p>
             <input type="text" id="user-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
             <button style="width:100%; background:var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="next()">Next / 下一題</button>`;
-        
         document.getElementById('user-input').focus();
     }
 
-function next() {
+    function next() {
         var total = data[currentTense].questions.length;
-        var rawInput = document.getElementById('user-input').value.trim();
+        var userInput = document.getElementById('user-input').value;
+        var correctAns = data[currentTense].questions[currentIdx].a;
         
-        // Helper function to turn "don't" into "do not", etc.
-        function normalize(text) {
-            return text.toLowerCase()
-                .replace(/n['’]t/g, " not")
-                .replace(/['’]m/g, " am")
-                .replace(/['’]re/g, " are")
-                .replace(/['’]s/g, " is")
-                .replace(/won['’]t/g, "will not")
-                .replace(/can['’]t/g, "cannot");
-        }
+        var isCorrect = clean(userInput) === clean(correctAns);
 
-        var studentAns = normalize(rawInput);
-        var correctAns = normalize(data[currentTense].questions[currentIdx].a);
-        
-        var isCorrect = (studentAns === correctAns);
-
-        // Track response for Review
         userAnswers.push({
             q: data[currentTense].questions[currentIdx].q,
-            user: rawInput,
-            correct: data[currentTense].questions[currentIdx].a,
+            user: userInput,
+            correct: correctAns,
             isCorrect: isCorrect
         });
 
@@ -411,42 +369,43 @@ function next() {
         var finalPct = Math.round((score / total) * 100);
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
-        
-        // Report Summary
         document.getElementById('score-summary').innerHTML = `
-            <p style="margin:5px 0;">Student: ${studentName}</p>
-            <p style="margin:5px 0;">Lesson: ${data[currentTense].title}</p>
-            <p style="font-size:3rem; margin:10px 0;">${finalPct}%</p>
-        `;
+            <p>Student: ${studentName}</p>
+            <p>Lesson: ${data[currentTense].title}</p>
+            <p style="font-size:3rem;">${finalPct}%</p>`;
 
-        // Generate Detailed Review List
         let reviewHtml = "";
         userAnswers.forEach((item, index) => {
             reviewHtml += `
                 <div class="review-item">
                     <div class="review-q">Q${index + 1}: ${item.q}</div>
-                    Your Answer: <span class="${item.isCorrect ? 'correct-ans' : 'wrong-ans'}">${item.user || "(No answer)"}</span>
-                    ${!item.isCorrect ? `<br>Correct Answer: <span class="correct-ans">${item.correct}</span>` : ' (Correct!)'}
+                    Your Answer: <span class="${item.isCorrect ? 'correct-ans' : 'wrong-ans'}">${item.user || "(None)"}</span>
+                    ${!item.isCorrect ? `<br>Correct: <span class="correct-ans">${item.correct}</span>` : ' (Correct!)'}
                 </div>`;
         });
         document.getElementById('review-list').innerHTML = reviewHtml;
     }
 
-    // New JPEG Save Function
     function saveAsJpeg() {
         const target = document.getElementById('capture-area');
-        html2canvas(target).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `${studentName}_English_Test.jpg`;
-            link.href = canvas.toDataURL('image/jpeg', 0.9);
-            link.click();
+        html2canvas(target, { scale: 2 }).then(canvas => {
+            const imageData = canvas.toDataURL('image/jpeg', 0.9);
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <div style="text-align:center; font-family:sans-serif; padding:20px;">
+                    <h3>Long-press the image below to save it</h3>
+                    <img src="${imageData}" style="width:100%; border:1px solid #ddd; border-radius:10px;">
+                    <br><br>
+                    <button onclick="window.close()" style="padding:12px 24px; background:#1a73e8; color:white; border:none; border-radius:8px;">Back to Quiz</button>
+                </div>
+            `);
         });
     }
 
     function shareResult(platform) {
         const total = data[currentTense].questions.length;
         const finalPct = Math.round((score / total) * 100);
-        const text = `I scored ${finalPct}% on the ${data[currentTense].title} quiz!`;
+        const text = `I scored ${finalPct}% on ${data[currentTense].title}!`;
         const url = window.location.href;
         if (platform === 'line') {
             window.open(`https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text + " " + url)}`);
