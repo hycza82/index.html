@@ -1,0 +1,34 @@
+// UPDATED CLEAN FUNCTION
+function clean(text) {
+    if (!text) return "";
+    return text.toLowerCase()
+        .replace(/won't/g, "will not")      // Specific check for won't
+        .replace(/n't/g, " not")           // Catches don't, doesn't, isn't
+        .replace(/'ll/g, " will")          // Catches I'll, they'll
+        .replace(/'m/g, " am")
+        .replace(/'re/g, " are")
+        .replace(/'s/g, " is")
+        .replace(/[.,!?;:]/g, "")          // Removes punctuation
+        .replace(/\s+/g, " ")              // Removes double spaces
+        .trim();
+}
+
+function next() {
+    var total = data[currentTense].questions.length;
+    var userInput = document.getElementById('user-input').value;
+    var correctAns = data[currentTense].questions[currentIdx].a;
+    
+    // This line is the magic - it cleans BOTH sides before comparing
+    var isCorrect = clean(userInput) === clean(correctAns);
+
+    userAnswers.push({
+        q: data[currentTense].questions[currentIdx].q,
+        user: userInput,
+        correct: correctAns,
+        isCorrect: isCorrect
+    });
+
+    if (isCorrect) score++;
+    currentIdx++;
+    if (currentIdx < total) showQuestion(); else showResults();
+}
