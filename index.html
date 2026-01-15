@@ -130,7 +130,7 @@ function clean(text) {
         .replace(/'ll/g, " will")
         .replace(/'m/g, " am").replace(/'re/g, " are").replace(/'s/g, " is")
         .replace(/[.,!?;:]/g, "")
-        .replace(/\s+/g, " ");
+        .replace(/\s+/g, " "); 
 }
 
 function next() {
@@ -154,7 +154,51 @@ function next() {
 }
 
 const data = {
-    // Add these three objects into your main 'data' variable
+    
+};
+    presentSimple: {
+        title: "Present Simple 現在簡單式",
+        usage: "Habits and facts.",
+        table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Verb</td><td>do not + verb</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + verb</td></tr></table>`,
+        contractions: ["do not → don't", "does not → doesn't"],
+        questions: [/* ... 10 questions ... */]
+    },
+    pastSimple: {
+        title: "Past Simple 過去簡單式",
+        usage: "Actions finished in the past.",
+        table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative</td><td>Past Verb</td></tr><tr><td>Negative</td><td>did not + verb</td></tr></table>`,
+        contractions: ["did not → didn't"],
+        questions: [/* ... 10 questions ... */]
+    },
+    futureSimple: {
+        title: "Future Simple 未來簡單式",
+        usage: "Plans and predictions.",
+        table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative</td><td>will + verb</td></tr><tr><td>Negative</td><td>will not + verb</td></tr></table>`,
+        contractions: ["will not → won't", "I will → I'll", "they will → they'll"],
+        questions: [/* ... 10 questions ... */]
+    },
+    presentContinuous: {
+        title: "Present Continuous 現在進行式",
+        usage: "Actions happening now.",
+        table: `<table class="rule-table"><tr><th>I</th><td>am + ing</td></tr><tr><td>He/She/It</td><td>is + ing</td></tr><tr><td>You/We/They</td><td>are + ing</td></tr></table>`,
+        contractions: ["am not → 'm not", "is not → isn't", "are not → aren't", "he is → he's", "they are → they're"],
+        questions: [/* ... 10 questions ... */]
+    },
+    pastContinuous: {
+        title: "Past Continuous 過去進行式",
+        usage: "Was happening in the past.",
+        table: `<table class="rule-table"><tr><th>I/He/She/It</th><td>was + ing</td></tr><tr><td>You/We/They</td><td>were + ing</td></tr></table>`,
+        contractions: ["was not → wasn't", "were not → weren't"],
+        questions: [/* ... 10 questions ... */]
+    },
+    futureContinuous: {
+        title: "Future Continuous 未來進行式",
+        usage: "Will be in progress later.",
+        table: `<table class="rule-table"><tr><th>All Subjects</th><td>will be + ing</td></tr></table>`,
+        contractions: ["will not be → won't be", "I will be → I'll be"],
+        questions: [/* ... 10 questions ... */]
+    },
+        // Add these three objects into your main 'data' variable
 const perfectTensesPatch = {
     presentPerfect: {
         title: "Present Perfect 現在完成式",
@@ -221,50 +265,7 @@ const perfectTensesPatch = {
             {q: "They ___ (not build) it by then.", a: "will not have built", t: "他們在那之前還不會蓋好。"},
             {q: "By then, the winter ___ (end).", a: "will have ended", t: "到那時冬天就會結束了。"}
         ]
-    }
-};
-    presentSimple: {
-        title: "Present Simple 現在簡單式",
-        usage: "Habits and facts.",
-        table: `<table class="rule-table"><tr><th>Subject</th><th>Affirmative</th><th>Negative</th></tr><tr><td>I/You/We/They</td><td>Verb</td><td>do not + verb</td></tr><tr><td>He/She/It</td><td>Verb + s/es</td><td>does not + verb</td></tr></table>`,
-        contractions: ["do not → don't", "does not → doesn't"],
-        questions: [/* ... 10 questions ... */]
     },
-    pastSimple: {
-        title: "Past Simple 過去簡單式",
-        usage: "Actions finished in the past.",
-        table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative</td><td>Past Verb</td></tr><tr><td>Negative</td><td>did not + verb</td></tr></table>`,
-        contractions: ["did not → didn't"],
-        questions: [/* ... 10 questions ... */]
-    },
-    futureSimple: {
-        title: "Future Simple 未來簡單式",
-        usage: "Plans and predictions.",
-        table: `<table class="rule-table"><tr><th>All Subjects</th><th>Structure</th></tr><tr><td>Affirmative</td><td>will + verb</td></tr><tr><td>Negative</td><td>will not + verb</td></tr></table>`,
-        contractions: ["will not → won't", "I will → I'll", "they will → they'll"],
-        questions: [/* ... 10 questions ... */]
-    },
-    presentContinuous: {
-        title: "Present Continuous 現在進行式",
-        usage: "Actions happening now.",
-        table: `<table class="rule-table"><tr><th>I</th><td>am + ing</td></tr><tr><td>He/She/It</td><td>is + ing</td></tr><tr><td>You/We/They</td><td>are + ing</td></tr></table>`,
-        contractions: ["am not → 'm not", "is not → isn't", "are not → aren't", "he is → he's", "they are → they're"],
-        questions: [/* ... 10 questions ... */]
-    },
-    pastContinuous: {
-        title: "Past Continuous 過去進行式",
-        usage: "Was happening in the past.",
-        table: `<table class="rule-table"><tr><th>I/He/She/It</th><td>was + ing</td></tr><tr><td>You/We/They</td><td>were + ing</td></tr></table>`,
-        contractions: ["was not → wasn't", "were not → weren't"],
-        questions: [/* ... 10 questions ... */]
-    },
-    futureContinuous: {
-        title: "Future Continuous 未來進行式",
-        usage: "Will be in progress later.",
-        table: `<table class="rule-table"><tr><th>All Subjects</th><td>will be + ing</td></tr></table>`,
-        contractions: ["will not be → won't be", "I will be → I'll be"],
-        questions: [/* ... 10 questions ... */]
-    }
 };
 
 function toggleModal(show) {
