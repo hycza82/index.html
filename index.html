@@ -65,6 +65,9 @@
         <h3 id="welcome-msg" style="color: var(--primary); text-align: center; margin-bottom: 10px;"></h3>
         <h2 style="text-align: center; margin-bottom: 20px;">Select a Lesson / 選擇課程</h2>
         <div class="menu-grid">
+            <button class="lesson-btn" onclick="loadTense('presentPerfect')"><span class="btn-en">Present Perfect</span></button>
+            <button class="lesson-btn" onclick="loadTense('pastPerfect')"><span class="btn-en">Past Perfect</span></button>
+            <button class="lesson-btn" onclick="loadTense('futurePerfect')"><span class="btn-en">Future Perfect</span></button>
             <button class="lesson-btn" onclick="loadTense('presentSimple')"><span class="btn-en">Present Simple</span><span class="btn-cn">現在簡單式</span></button>
             <button class="lesson-btn" onclick="loadTense('pastSimple')"><span class="btn-en">Past Simple</span><span class="btn-cn">過去簡單式</span></button>
             <button class="lesson-btn" onclick="loadTense('futureSimple')"><span class="btn-en">Future Simple</span><span class="btn-cn">未來簡單式</span></button>
@@ -115,6 +118,10 @@
 function clean(text) {
     if (!text) return "";
     return text.toLowerCase().trim()
+        .replace(/haven't/g, "have not")
+        .replace(/hasn't/g, "has not")
+        .replace(/hadn't/g, "had not")
+        .replace(/won't have/g, "will not have")
         .replace(/[‘’“”]/g, "'")
         .replace(/won't/g, "will not")
         .replace(/wasn't/g, "was not")   // Added for Past Continuous
@@ -147,6 +154,75 @@ function next() {
 }
 
 const data = {
+    // Add these three objects into your main 'data' variable
+const perfectTensesPatch = {
+    presentPerfect: {
+        title: "Present Perfect 現在完成式",
+        usage: "Actions that happened at an unspecified time or started in the past and continue now.",
+        table: `<table class="rule-table">
+                    <tr><th>Subject</th><th>Structure (have/has + V3)</th></tr>
+                    <tr><td>I / You / We / They</td><td><b>have</b> + past participle</td></tr>
+                    <tr><td>He / She / It</td><td><b>has</b> + past participle</td></tr>
+                </table>`,
+        contractions: ["have not → haven't", "has not → hasn't", "I have → I've", "he has → he's", "we have → we've"],
+        questions: [
+            {q: "I ___ (see) that movie already.", a: "have seen", t: "我已經看過那部電影了。"},
+            {q: "She ___ (not finish) her homework.", a: "has not finished", t: "她還沒完成功課。"},
+            {q: "They ___ (live) here for years.", a: "have lived", t: "他們在這邊住很多年了。"},
+            {q: "He ___ (lose) his passport.", a: "has lost", t: "他丟了他的護照。"},
+            {q: "We ___ (not meet) him before.", a: "have not met", t: "我們以前沒見過他。"},
+            {q: "You ___ (grow) so tall!", a: "have grown", t: "你長得真高！"},
+            {q: "The cat ___ (eat) its food.", a: "has eaten", t: "貓已經吃完飼料了。"},
+            {q: "I ___ (not visit) London.", a: "have not visited", t: "我還沒去過倫敦。"},
+            {q: "It ___ (stop) raining.", a: "has stopped", t: "雨停了。"},
+            {q: "They ___ (buy) a new car.", a: "have bought", t: "他們買了一輛新車。"}
+        ]
+    },
+    pastPerfect: {
+        title: "Past Perfect 過去完成式",
+        usage: "An action that was completed before another action in the past.",
+        table: `<table class="rule-table">
+                    <tr><th>Subject</th><th>Structure (had + V3)</th></tr>
+                    <tr><td>All Subjects</td><td><b>had</b> + past participle</td></tr>
+                    <tr><td>Negative</td><td><b>had not</b> + past participle</td></tr>
+                </table>`,
+        contractions: ["had not → hadn't", "I had → I'd", "he had → he'd", "they had → they'd"],
+        questions: [
+            {q: "The train ___ (leave) when I arrived.", a: "had left", t: "我抵達時火車已經開走了。"},
+            {q: "She ___ (not eat) before the test.", a: "had not eaten", t: "她考試前沒吃東西。"},
+            {q: "I ___ (study) English before moving.", a: "had studied", t: "我搬家前學過英文。"},
+            {q: "They ___ (finish) lunch by 1 PM.", a: "had finished", t: "他們在一點前就吃完午餐了。"},
+            {q: "He ___ (not see) the news.", a: "had not seen", t: "他那時還沒看到新聞。"},
+            {q: "We ___ (clean) the house already.", a: "had cleaned", t: "我們那時已經打掃完房子了。"},
+            {q: "The film ___ (start) before we sat down.", a: "had started", t: "在我們坐下前電影就開始了。"},
+            {q: "You ___ (not call) me back.", a: "had not called", t: "你那時還沒回電給我。"},
+            {q: "I realized I ___ (lose) my keys.", a: "had lost", t: "我發現我掉了鑰匙。"},
+            {q: "They ___ (prepare) everything.", a: "had prepared", t: "他們那時已經準備好一切。"}
+        ]
+    },
+    futurePerfect: {
+        title: "Future Perfect 未來完成式",
+        usage: "An action that will be finished by a certain time in the future.",
+        table: `<table class="rule-table">
+                    <tr><th>Subject</th><th>Structure (will have + V3)</th></tr>
+                    <tr><td>All Subjects</td><td><b>will have</b> + past participle</td></tr>
+                    <tr><td>Negative</td><td><b>will not have</b> + past participle</td></tr>
+                </table>`,
+        contractions: ["will not have → won't have", "I will have → I'll have", "they will have → they'll have"],
+        questions: [
+            {q: "I ___ (finish) by tomorrow.", a: "will have finished", t: "我明天以前會完成。"},
+            {q: "She ___ (not arrive) by 6 PM.", a: "will not have arrived", t: "她在六點前不會抵達。"},
+            {q: "They ___ (leave) by the time you get here.", a: "will have left", t: "你到這時他們應該已經離開了。"},
+            {q: "We ___ (save) enough money soon.", a: "will have saved", t: "我們很快就會存夠錢了。"},
+            {q: "He ___ (not graduate) yet.", a: "will not have graduated", t: "他那時還沒畢業。"},
+            {q: "By next year, I ___ (buy) a house.", a: "will have bought", t: "明年以前我會買好房。"},
+            {q: "The sun ___ (set) by 8 PM.", a: "will have set", t: "太陽八點前就會下山了。"},
+            {q: "You ___ (read) the whole book.", a: "will have read", t: "到時你就會讀完一整本書。"},
+            {q: "They ___ (not build) it by then.", a: "will not have built", t: "他們在那之前還不會蓋好。"},
+            {q: "By then, the winter ___ (end).", a: "will have ended", t: "到那時冬天就會結束了。"}
+        ]
+    }
+};
     presentSimple: {
         title: "Present Simple 現在簡單式",
         usage: "Habits and facts.",
