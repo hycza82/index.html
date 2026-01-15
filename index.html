@@ -114,16 +114,15 @@
 // UPDATED CLEAN FUNCTION
 function clean(text) {
     if (!text) return "";
-    return text.toLowerCase()
-        .replace(/won't/g, "will not")      // Specific check for won't
-        .replace(/n't/g, " not")           // Catches don't, doesn't, isn't
-        .replace(/'ll/g, " will")          // Catches I'll, they'll
-        .replace(/'m/g, " am")
-        .replace(/'re/g, " are")
-        .replace(/'s/g, " is")
+    return text.toLowerCase().trim()
+        .replace(/[‘’“”]/g, "'")           // Fixes iPhone "Smart Quotes"
+        /* THE CONTRACTION PATCH */
+        .replace(/won't/g, "will not")     // Specifically maps "won't" to "will not"
+        .replace(/n't/g, " not")           // Maps "don't", "isn't", "wasn't" to "not"
+        .replace(/'ll/g, " will")          // Maps "I'll", "they'll" to "will"
+        /* END OF PATCH */
         .replace(/[.,!?;:]/g, "")          // Removes punctuation
-        .replace(/\s+/g, " ")              // Removes double spaces
-        .trim();
+        .replace(/\s+/g, " ");             // Cleans up extra spaces
 }
 
 function next() {
