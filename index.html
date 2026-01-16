@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andrew's English | 9-Tense Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
         :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --bg: #f8f9fa; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .app-container { width: 100%; max-width: 850px; position: relative; padding-bottom: 100px; }
@@ -30,13 +31,6 @@
         .review-item { border-bottom: 1px solid #eee; padding: 15px 0; font-size: 0.95rem; }
         .correct-ans { color: var(--success); font-weight: bold; }
         .wrong-ans { color: var(--error); text-decoration: line-through; margin-right: 10px; }
-     #capture-area {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    color: #333;
-    /* This ensures the PDF background isn't black or transparent */
-}
     </style>
 </head>
 <body>
@@ -76,10 +70,7 @@
             <h2 style="text-align:center; margin-top: 0;">Performance Report</h2>
             <div id="score-summary" style="text-align:center; border: 3px dashed #e1e4e8; padding: 30px; margin-bottom: 25px; border-radius: 15px;"></div>
         </div>
-        <button style="background:#ff9800; color:white; width:100%; padding:18px; border:none; border-radius:10px; cursor:pointer; font-weight: bold; margin-bottom:20px;" 
-        onclick="saveAsPDF()">
-        📄 Save Result as PDF
-        </button>
+        <button style="background:#ff9800; color:white; width:100%; padding:18px; border:none; border-radius:10px; cursor:pointer; font-weight: bold; margin-bottom:20px;" onclick="saveAsJpeg()">📸 Save Result to Phone</button>
         <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">Answer Review:</h3>
         <div id="review-list"></div>
     </div>
@@ -248,48 +239,13 @@
         document.getElementById('menu-card').style.display='block';
     }
 
-async function saveAsPDF() {
-    const { jsPDF } = window.jspdf;
-    const btn = event.target;
-    btn.innerText = "Generating PDF..."; // Feedback for user
-    
-    try {
-        const canvas = await html2canvas(document.getElementById('capture-area'), {
-            scale: 2, // High resolution
-            useCORS: true,
-            logging: false,
-            backgroundColor: "#ffffff"
+    function saveAsJpeg() {
+        html2canvas(document.getElementById('capture-area')).then(canvas => {
+            const img = canvas.toDataURL('image/jpeg');
+            const win = window.open();
+            win.document.write(`<div style="text-align:center; padding:20px;"><p>Hold image to save to your phone</p><img src="${img}" style="width:100%; max-width:500px; border:1px solid #ddd; border-radius:10px;"></div>`);
         });
-        
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${studentName}_English_Test_Result.pdf`);
-        
-        btn.innerText = "📄 Save Result as PDF";
-    } catch (error) {
-        console.error("PDF Error:", error);
-        alert("Could not generate PDF. Please try taking a screenshot instead.");
-        btn.innerText = "📄 Save Result as PDF";
     }
-}
-    
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    
-    // Calculate dimensions to fit the PDF page
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    
-    pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-    pdf.save(`${studentName}_English_Result.pdf`);
-}
 </script>
 </body>
 </html>
