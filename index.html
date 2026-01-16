@@ -81,55 +81,55 @@
 
     const data = {
         presentSimple: {
-            title: "Present Simple 現在簡單式", usage: "Habits and general truths. (習慣與普遍真理)",
+            title: "Present Simple 現在簡單式", usage: "Habits and facts.",
             table: `<table class="rule-table"><tr><th>I/You/We/They</th><td>Verb</td></tr><tr><th>He/She/It</th><td>Verb + s/es</td></tr></table>`,
             contractions: ["do not → don't", "does not → doesn't"],
             questions: [{q: "He ___ (drink) milk.", a: "drinks", t: "他喝牛奶。"}, {q: "They ___ (not like) apples.", a: "do not like", t: "他們不喜歡。"}, {q: "She ___ (study) English.", a: "studies", t: "她學英文。"}, {q: "I ___ (not play) soccer.", a: "do not play", t: "我不踢球。"}, {q: "The cat ___ (sleep) a lot.", a: "sleeps", t: "貓睡很多。"}, {q: "Water ___ (boil) at 100°C.", a: "boils", t: "水會沸騰。"}, {q: "We ___ (not live) here.", a: "do not live", t: "我們不住這。"}, {q: "He ___ (wash) his car.", a: "washes", t: "他洗車。"}, {q: "You ___ (not speak) French.", a: "do not speak", t: "你不說法語。"}, {q: "Sun ___ (rise) in the east.", a: "rises", t: "太陽升起。"}]
         },
         pastSimple: {
-            title: "Past Simple 過去簡單式", usage: "Completed actions in the past. (過去已完成的動作)",
+            title: "Past Simple 過去簡單式", usage: "Finished actions.",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>V2 (ed/irregular)</td></tr><tr><th>Negative</th><td>did not + V1</td></tr></table>`,
             contractions: ["did not → didn't"],
             questions: [{q: "I ___ (visit) Japan.", a: "visited", t: "我去了日本。"}, {q: "They ___ (not go) home.", a: "did not go", t: "他們沒回家。"}, {q: "She ___ (see) a movie.", a: "saw", t: "她看了電影。"}, {q: "He ___ (not eat) lunch.", a: "did not eat", t: "他沒吃午餐。"}, {q: "We ___ (play) tennis.", a: "played", t: "我們打球。"}, {q: "I ___ (buy) a phone.", a: "bought", t: "我買了手機。"}, {q: "You ___ (not call) me.", a: "did not call", t: "你沒打給我。"}, {q: "It ___ (rain) yesterday.", a: "rained", t: "昨天下了雨。"}, {q: "They ___ (finish) late.", a: "finished", t: "他們晚結束。"}, {q: "She ___ (lost) her bag.", a: "lost", t: "她丟了包。"}]
         },
         futureSimple: {
-            title: "Future Simple 未來簡單式", usage: "Future plans and predictions. (未來的計畫與預測)",
+            title: "Future Simple 未來簡單式", usage: "Future plans.",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>will + V1</td></tr><tr><th>Negative</th><td>will not + V1</td></tr></table>`,
             contractions: ["will not → won't", "I will → I'll"],
             questions: [{q: "I ___ (help) you.", a: "will help", t: "我會幫你。"}, {q: "They ___ (not come).", a: "will not come", t: "他們不會來。"}, {q: "She ___ (travel) soon.", a: "will travel", t: "她會去旅行。"}, {q: "We ___ (not forget) it.", a: "will not forget", t: "我們不會忘。"}, {q: "He ___ (buy) a car.", a: "will buy", t: "他會買車。"}, {q: "It ___ (be) cold.", a: "will be", t: "會變冷。"}, {q: "You ___ (love) this.", a: "will love", t: "你會喜歡。"}, {q: "I ___ (not watch) TV.", a: "will not watch", t: "我不會看。"}, {q: "They ___ (win).", a: "will win", t: "他們會贏。"}, {q: "She ___ (not call).", a: "will not call", t: "她不會打。"}]
         },
         presentContinuous: {
-            title: "Present Continuous 現在進行式", usage: "Actions happening right now. (現在正在進行的動作)",
+            title: "Present Continuous 現在進行式", usage: "Now.",
             table: `<table class="rule-table"><tr><th>I</th><td>am + ing</td></tr><tr><th>He/She/It</th><td>is + ing</td></tr><tr><th>You/We/They</th><td>are + ing</td></tr></table>`,
             contractions: ["is not → isn't", "are not → aren't"],
             questions: [{q: "I ___ (read) now.", a: "am reading", t: "正在讀。"}, {q: "They ___ (not dance).", a: "are not dancing", t: "沒跳舞。"}, {q: "She ___ (cook) now.", a: "is cooking", t: "正在煮。"}, {q: "We ___ (not watch) TV.", a: "are not watching", t: "沒在看。"}, {q: "You ___ (listen) to me.", a: "are listening", t: "在聽我說。"}, {q: "He ___ (not work).", a: "is not working", t: "沒工作。"}, {q: "Dog ___ (bark).", a: "is barking", t: "狗在叫。"}, {q: "I ___ (not cry).", a: "am not crying", t: "我沒哭。"}, {q: "They ___ (play) now.", a: "are playing", t: "在玩。"}, {q: "It ___ (get) dark.", a: "is getting", t: "天黑了。"}]
         },
         pastContinuous: {
-            title: "Past Continuous 過去進行式", usage: "Action in progress at a specific past time. (過去某個時間點正在進行的動作)",
+            title: "Past Continuous 過去進行式", usage: "Was happening.",
             table: `<table class="rule-table"><tr><th>I/He/She/It</th><td>was + ing</td></tr><tr><th>You/We/They</th><td>were + ing</td></tr></table>`,
             contractions: ["was not → wasn't", "were not → weren't"],
             questions: [{q: "I ___ (eat) at 7.", a: "was eating", t: "七點時在吃。"}, {q: "They ___ (not study).", a: "were not studying", t: "沒讀書。"}, {q: "She ___ (sleep).", a: "was sleeping", t: "在睡覺。"}, {q: "We ___ (walk).", a: "were walking", t: "在走路。"}, {q: "He ___ (not drive).", a: "was not driving", t: "沒開車。"}, {q: "You ___ (sing).", a: "were singing", t: "在唱歌。"}, {q: "It ___ (snow).", a: "was snowing", t: "在下雪。"}, {q: "I ___ (not look).", a: "was not looking", t: "沒在看。"}, {q: "They ___ (work).", a: "were working", t: "在工作。"}, {q: "He ___ (wear) a hat.", a: "was wearing", t: "戴著帽子。"}]
         },
         futureContinuous: {
-            title: "Future Continuous 未來進行式", usage: "Action that will be in progress in the future. (未來某個時間點將在進行的動作)",
+            title: "Future Continuous 未來進行式", usage: "Will be happening.",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>will be + ing</td></tr></table>`,
             contractions: ["will not be → won't be"],
             questions: [{q: "I ___ (wait) for you.", a: "will be waiting", t: "會在那等你。"}, {q: "They ___ (not work).", a: "will not be working", t: "不會在工作。"}, {q: "She ___ (fly) tonight.", a: "will be flying", t: "在飛。"}, {q: "We ___ (have) lunch.", a: "will be having", t: "在吃午餐。"}, {q: "He ___ (not sleep).", a: "will not be sleeping", t: "沒睡覺。"}, {q: "You ___ (study).", a: "will be studying", t: "在讀書。"}, {q: "It ___ (rain) later.", a: "will be raining", t: "在下雨。"}, {q: "I ___ (not using) it.", a: "will not be using", t: "沒在用。"}, {q: "They ___ (swim).", a: "will be swimming", t: "在游泳。"}, {q: "She ___ (wear) red.", a: "will be wearing", t: "穿紅色。"}]
         },
         presentPerfect: {
-            title: "Present Perfect 現在完成式", usage: "Life experience or actions linked to now. (人生經驗或與現在相關的過去動作)",
+            title: "Present Perfect 現在完成式", usage: "Up to now.",
             table: `<table class="rule-table"><tr><th>I/You/We/They</th><td>have + V3</td></tr><tr><th>He/She/It</th><td>has + V3</td></tr></table>`,
             contractions: ["have not → haven't", "has not → hasn't"],
             questions: [{q: "I ___ (see) it.", a: "have seen", t: "看過了。"}, {q: "She ___ (not finish).", a: "has not finished", t: "沒完成。"}, {q: "They ___ (live) here.", a: "have lived", t: "住這。"}, {q: "He ___ (lose) keys.", a: "has lost", t: "丟鑰匙。"}, {q: "We ___ (not meet).", a: "have not met", t: "沒見過。"}, {q: "You ___ (grow).", a: "have grown", t: "長高。"}, {q: "Cat ___ (eat).", a: "has eaten", t: "吃了。"}, {q: "I ___ (not visit).", a: "have not visited", t: "沒去過。"}, {q: "It ___ (stop) raining.", a: "has stopped", t: "雨停。"}, {q: "They ___ (buy) a car.", a: "have bought", t: "買車。"}]
         },
         pastPerfect: {
-            title: "Past Perfect 過去完成式", usage: "Action completed before another past action. (在過去某事之前已完成的動作)",
+            title: "Past Perfect 過去完成式", usage: "Before then.",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>had + V3</td></tr></table>`,
             contractions: ["had not → hadn't"],
             questions: [{q: "Train ___ (leave).", a: "had left", t: "火車開了。"}, {q: "She ___ (not eat).", a: "had not eaten", t: "沒吃。"}, {q: "I ___ (study) hard.", a: "had studied", t: "學過。"}, {q: "They ___ (finish) lunch.", a: "had finished", t: "吃完午餐。"}, {q: "He ___ (not see) me.", a: "had not seen", t: "沒看見。"}, {q: "We ___ (clean) it.", a: "had cleaned", t: "打掃了。"}, {q: "Film ___ (start).", a: "had started", t: "開始了。"}, {q: "You ___ (not call).", a: "had not called", t: "沒打來。"}, {q: "I ___ (lose) it.", a: "had lost", t: "丟了。"}, {q: "They ___ (prepare).", a: "had prepared", t: "準備了。"}]
         },
         futurePerfect: {
-            title: "Future Perfect 未來完成式", usage: "Action that will be finished by a future time. (在未來某個時間點前將完成的動作)",
+            title: "Future Perfect 未來完成式", usage: "Done by then.",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>will have + V3</td></tr></table>`,
             contractions: ["will not have → won't have"],
             questions: [{q: "I ___ (finish) by 5.", a: "will have finished", t: "五點前會完成。"}, {q: "She ___ (not arrive).", a: "will not have arrived", t: "沒抵達。"}, {q: "They ___ (leave) soon.", a: "will have left", t: "離開了。"}, {q: "We ___ (save) money.", a: "will have saved", t: "存錢了。"}, {q: "He ___ (not graduate).", a: "will not have graduated", t: "沒畢業。"}, {q: "I ___ (buy) a house.", a: "will have bought", t: "買房。"}, {q: "Sun ___ (set) by 8.", a: "will have set", t: "日落。"}, {q: "You ___ (read) it all.", a: "will have read", t: "讀完。"}, {q: "They ___ (not build) it.", a: "will not have built", t: "沒蓋。"}, {q: "Winter ___ (end).", a: "will have ended", t: "冬天結束。"}]
