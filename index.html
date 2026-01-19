@@ -31,8 +31,17 @@
         .review-item { border-bottom: 1px solid #eee; padding: 10px 0; }
         .correct-ans { color: var(--success); font-weight: bold; }
         .wrong-ans { color: var(--error); text-decoration: line-through; margin-right: 10px; }
+        #capture-area {
+    background: white;
+    padding: 30px;
+    border-radius: 0; /* Square edges look more like a document */
+    color: #333;
+    width: 600px; /* Fixed width for consistent PDF output */
+    margin: 0 auto;
+}
     </style>
 </head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <body>
 
 <div id="rules-modal"><div class="modal-content"><span class="close-modal" onclick="toggleModal(false)">&times;</span><div id="modal-body"></div></div></div>
@@ -224,13 +233,65 @@
         document.getElementById('menu-card').style.display='block';
     }
 
-    function saveAsJpeg() {
-        html2canvas(document.getElementById('capture-area')).then(canvas => {
-            const img = canvas.toDataURL('image/jpeg');
-            const win = window.open();
-            win.document.write(`<img src="${img}" style="width:100%;">`);
+async function saveAsPDF() {
+    const { jsPDF } = window.jspdf;
+    const captureElement = document.getElementById('capture-area');
+    
+    // Feedback to user
+    const btn = event.target;
+    btn.innerText = "Downloading PDF...";
+
+    try {
+        const canvas = await html2canvas(captureElement, {
+            scale: 2, // Double resolution for crisp text
+            useCORS: true,
+            backgroundColor: "#ffffff"
         });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Calculate dimensions to fit A4 paper
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+        
+        // Triggers the standard browser "Save As" or direct download
+        pdf.save(`${studentName}_English_Test.pdf`);
+        
+        btn.innerText = "📄 Save Result to Computer";
+    } catch (err) {
+        console.error(err);
+        alert("Error generating PDF. Please check your browser settings.");
+        btn.innerText = "📄 Save Result to Computer";
     }
+}
+    function toggleModal(show) {
+    if (show) {
+        const t = data[currentTense];
+        // The "Usage" now includes the Chinese translation from your data object
+        const cList = t.contractions.map(c => `<li>${c}</li>`).join('');
+        
+        document.getElementById('modal-body').innerHTML = `
+            <h2 style="color: var(--primary); margin-top:0;">${t.title}</h2>
+            <p style="font-size: 1.1rem; border-left: 4px solid var(--primary); padding-left: 10px;">
+                <strong>Usage:</strong> ${t.usage}
+            </p>
+            ${t.table}
+            <div style="background:#f0f7ff; padding:15px; border-radius:10px; border: 1px solid #d0e3ff; margin-top:15px;">
+                <strong style="color: #0056b3;">Allowed Contractions:</strong>
+                <ul style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr;">
+                    ${cList}
+                </ul>
+            </div>
+        `;
+        document.getElementById('rules-modal').style.display = 'block';
+    } else {
+        document.getElementById('rules-modal').style.display = 'none';
+    }
+}
 </script>
 </body>
 </html>
