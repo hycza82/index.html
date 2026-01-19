@@ -1,58 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrew's English | Online Classroom</title>
+    <title>Andrew's English | 9-Tense Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #1a73e8; --success: #2d8a57; --error: #c53030; --bg: #f8f9fa; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 850px; position: relative; padding-bottom: 100px; }
-        .school-header { text-align: center; margin-bottom: 20px; }
-        .school-logo { max-width: 300px; height: auto; }
-        .card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-        @media (max-width: 700px) { .menu-grid { grid-template-columns: 1fr 1fr; } }
-        .lesson-btn { padding: 15px; border: none; background: var(--primary); color: white; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .lesson-btn:hover { background: #1557b0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; color: #333; }
+        .app-container { width: 100%; max-width: 850px; }
+        .school-header { text-align: center; margin-bottom: 30px; }
+        .card { background: white; padding: 35px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #eee; margin-bottom: 20px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
+        .lesson-btn { padding: 20px; border: none; background: var(--primary); color: white; border-radius: 12px; cursor: pointer; transition: 0.3s; text-align: left; }
+        .lesson-btn:hover { background: #1557b0; transform: translateY(-3px); }
+        .btn-en { display: block; font-size: 0.8rem; opacity: 0.8; font-weight: 400; text-transform: uppercase; }
+        .btn-zh { display: block; font-size: 1.15rem; font-weight: 700; margin-top: 4px; }
         .nav-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 850px; display: flex; justify-content: space-between; z-index: 1000; }
-        .home-btn { background: #444; color: white; border: none; padding: 12px 20px; border-radius: 30px; cursor: pointer; }
-        .prev-btn-nav { background: white; color: #444; border: 1px solid #ddd; padding: 12px 20px; border-radius: 30px; cursor: pointer; visibility: hidden; }
-        .tense-header-bar { background: var(--primary); color: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
-        .rule-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        .rule-table th, .rule-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .rule-table th { background: #f1f3f4; color: var(--primary); }
-        input[type="text"] { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
-        #rules-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-        .modal-content { background: white; margin: 5% auto; padding: 30px; width: 90%; max-width: 600px; border-radius: 16px; position: relative; max-height: 85vh; overflow-y: auto; }
-        .close-modal { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
-        .review-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .home-btn { background: #444; color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; }
+        .rule-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95rem; }
+        .rule-table th, .rule-table td { border: 1px solid #dfe1e5; padding: 12px; text-align: left; }
+        .rule-table th { background: #f8f9fa; color: var(--primary); }
+        #rules-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; width: 90%; max-width: 650px; border-radius: 20px; position: relative; max-height: 85vh; overflow-y: auto; }
+        #capture-area { background: white; padding: 40px; border-radius: 0; color: #333; width: 700px; margin: 0 auto; }
+        .review-item { border-bottom: 1px solid #eee; padding: 15px 0; }
         .correct-ans { color: var(--success); font-weight: bold; }
-        .wrong-ans { color: var(--error); text-decoration: line-through; margin-right: 10px; }
-        #capture-area {
-    background: white;
-    padding: 30px;
-    border-radius: 0; /* Square edges look more like a document */
-    color: #333;
-    width: 600px; /* Fixed width for consistent PDF output */
-    margin: 0 auto;
-}
+        input[type="text"] { width: 100%; padding: 18px; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; box-sizing: border-box; }
+        .help-btn { color: var(--primary); cursor: pointer; font-weight: 600; text-decoration: underline; }
     </style>
 </head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <body>
 
-<div id="rules-modal"><div class="modal-content"><span class="close-modal" onclick="toggleModal(false)">&times;</span><div id="modal-body"></div></div></div>
+<div id="rules-modal"><div class="modal-content"><span style="position:absolute;right:20px;top:15px;font-size:30px;cursor:pointer;" onclick="toggleModal(false)">&times;</span><div id="modal-body"></div></div></div>
 
 <div class="app-container">
-    <header class="school-header"><img src="logo.png" alt="Andrew's English" class="school-logo"></header>
+    <header class="school-header">
+        <h1 style="color:var(--primary); margin:0;">Andrew's English</h1>
+        <p style="color:#666; font-weight:600;">9-Tense Grammar Mastery Portal | 語法大師入口</p>
+    </header>
 
     <div id="login-card" class="card">
-        <h2 style="text-align:center;">Student's Name <span style="font-size: 0.8rem; color:#666;">學生姓名</span></h2>
-        <input type="text" id="student-name" placeholder="Enter your name">
-        <button style="width:100%; background:var(--primary); color:white; padding:15px; border-radius:8px; border:none; font-weight:bold; cursor:pointer;" onclick="goToMenu()">Enter Classroom</button>
+        <h2 style="text-align:center;">Student Login | 學生登入</h2>
+        <input type="text" id="student-name" placeholder="Enter your full name (請輸入姓名)">
+        <button style="width:100%; background:var(--primary); color:white; padding:18px; border-radius:10px; border:none; font-weight:bold; cursor:pointer;" onclick="goToMenu()">Enter Classroom | 進入教室</button>
     </div>
 
     <div id="menu-card" class="card" style="display:none;">
@@ -62,104 +55,177 @@
 
     <div id="rule-card" class="card" style="display:none;">
         <div id="rule-content"></div>
-        <button style="width:100%; background: var(--success); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="startQuiz()">Start Quiz</button>
+        <button style="width:100%; background: var(--success); color:white; padding:18px; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top: 20px;" onclick="startQuiz()">Start Quiz | 開始測驗</button>
     </div>
 
     <div id="quiz-container" class="card" style="display:none;">
-        <div id="current-tense-display" class="tense-header-bar"></div>
+        <div id="current-tense-display" style="background:var(--primary); color:white; padding:15px; border-radius:10px; margin-bottom:20px; text-align:center; font-weight:bold;"></div>
         <div id="question-area"></div>
     </div>
 
     <div id="results-container" class="card" style="display:none;">
         <div id="capture-area">
-            <h2 style="text-align:center;">Report Card</h2>
-            <div id="score-summary" style="text-align:center; border: 2px dashed #ddd; padding: 20px; margin-bottom: 20px;"></div>
+            <h2 style="text-align:center;">Performance Report</h2>
+            <div id="score-summary" style="text-align:center; border: 3px dashed #e1e4e8; padding: 30px; margin: 25px 0; border-radius: 15px;"></div>
+            <div id="review-list"></div>
         </div>
-        <button style="background:#ff9800; color:white; width:100%; padding:15px; border:none; border-radius:8px; cursor:pointer; margin-bottom:20px;" onclick="saveAsJpeg()">📸 Save Result</button>
-        <div id="review-list"></div>
+        <button style="background:#ff9800; color:white; width:100%; padding:20px; border:none; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1.1rem; margin-top:20px;" onclick="saveAsPDF()">📄 Save Result to Computer | 儲存 PDF 成績單</button>
     </div>
 
     <div id="global-nav" class="nav-container" style="display:none;">
-        <button class="home-btn" onclick="backToHome()">🏠 Home</button>
-        <button id="prev-btn" class="prev-btn-nav" onclick="prevQuestion()">⬅ Previous</button>
+        <button class="home-btn" onclick="location.reload()">🏠 Home | 首頁</button>
     </div>
 </div>
 
 <script>
-    let studentName = "", currentTense = "", currentIdx = 0, userAnswers = [];
+    let studentName = ""; let currentTense = ""; let currentIdx = 0; let userAnswers = [];
+
+    const v3Table = `
+    <h4 style="color:#c53030;">Past Participle (V3) Reference | 過去分詞對照表:</h4>
+    <table class="rule-table">
+        <tr><th>V1 (Base)</th><th>V2 (Past)</th><th>V3 (Participle)</th></tr>
+        <tr><td>eat</td><td>ate</td><td>eaten</td></tr><tr><td>go</td><td>went</td><td>gone</td></tr>
+        <tr><td>do</td><td>did</td><td>done</td></tr><tr><td>write</td><td>wrote</td><td>written</td></tr>
+        <tr><td>see</td><td>saw</td><td>seen</td></tr><tr><td>buy</td><td>bought</td><td>bought</td></tr>
+        <tr><td>take</td><td>took</td><td>taken</td></tr><tr><td>speak</td><td>spoke</td><td>spoken</td></tr>
+    </table>`;
 
     const data = {
         presentSimple: {
-            title: "Present Simple 現在簡單式", usage: "Habits and facts.",
+            title: "Present Simple 現在簡單式",
+            usage: "Habits and general facts. (習慣、事實、真理。)",
             table: `<table class="rule-table"><tr><th>I/You/We/They</th><td>Verb</td></tr><tr><th>He/She/It</th><td>Verb + s/es</td></tr></table>`,
             contractions: ["do not → don't", "does not → doesn't"],
-            questions: [{q: "He ___ (drink) milk.", a: "drinks", t: "他喝牛奶。"}, {q: "They ___ (not like) apples.", a: "do not like", t: "他們不喜歡。"}, {q: "She ___ (study) English.", a: "studies", t: "她學英文。"}, {q: "I ___ (not play) soccer.", a: "do not play", t: "我不踢球。"}, {q: "The cat ___ (sleep) a lot.", a: "sleeps", t: "貓睡很多。"}, {q: "Water ___ (boil) at 100°C.", a: "boils", t: "水會沸騰。"}, {q: "We ___ (not live) here.", a: "do not live", t: "我們不住這。"}, {q: "He ___ (wash) his car.", a: "washes", t: "他洗車。"}, {q: "You ___ (not speak) French.", a: "do not speak", t: "你不說法語。"}, {q: "Sun ___ (rise) in the east.", a: "rises", t: "太陽升起。"}]
+            questions: [
+                {q: "He ___ (drink) milk every day.", a: "drinks", t: "他每天喝牛奶。"},{q: "They ___ (not like) apples.", a: "do not like", t: "他們不喜歡蘋果。"},
+                {q: "Water ___ (boil) at 100°C.", a: "boils", t: "水在100度沸騰。"},{q: "She ___ (study) English.", a: "studies", t: "她學英文。"},
+                {q: "Cats ___ (catch) mice.", a: "catch", t: "貓抓老鼠。"},{q: "The sun ___ (rise) in the east.", a: "rises", t: "太陽從東方升起。"},
+                {q: "I ___ (not play) soccer.", a: "do not play", t: "我不踢足球。"},{q: "We ___ (live) in Taipei.", a: "live", t: "我們住在台北。"},
+                {q: "He ___ (watch) TV daily.", a: "watches", t: "他每天看電視。"},{q: "You ___ (not speak) French.", a: "do not speak", t: "你不說法語。"}
+            ]
         },
         pastSimple: {
-            title: "Past Simple 過去簡單式", usage: "Finished actions.",
-            table: `<table class="rule-table"><tr><th>All Subjects</th><td>V2 (ed/irregular)</td></tr><tr><th>Negative</th><td>did not + V1</td></tr></table>`,
+            title: "Past Simple 過去簡單式",
+            usage: "Completed actions in the past. (過去已完成的動作。)",
+            table: `<table class="rule-table"><tr><th>All Subjects</th><td>V2 (ed / irregular)</td></tr></table>`,
             contractions: ["did not → didn't"],
-            questions: [{q: "I ___ (visit) Japan.", a: "visited", t: "我去了日本。"}, {q: "They ___ (not go) home.", a: "did not go", t: "他們沒回家。"}, {q: "She ___ (see) a movie.", a: "saw", t: "她看了電影。"}, {q: "He ___ (not eat) lunch.", a: "did not eat", t: "他沒吃午餐。"}, {q: "We ___ (play) tennis.", a: "played", t: "我們打球。"}, {q: "I ___ (buy) a phone.", a: "bought", t: "我買了手機。"}, {q: "You ___ (not call) me.", a: "did not call", t: "你沒打給我。"}, {q: "It ___ (rain) yesterday.", a: "rained", t: "昨天下了雨。"}, {q: "They ___ (finish) late.", a: "finished", t: "他們晚結束。"}, {q: "She ___ (lost) her bag.", a: "lost", t: "她丟了包。"}]
+            questions: [
+                {q: "I ___ (see) him yesterday.", a: "saw", t: "我昨天看到他。"},{q: "They ___ (not go) home.", a: "did not go", t: "他們沒回家。"},
+                {q: "She ___ (eat) a sandwich.", a: "ate", t: "她吃了一個三明治。"},{q: "We ___ (buy) a car last year.", a: "bought", t: "我們去年買了車。"},
+                {q: "He ___ (finish) his work.", a: "finished", t: "他完成了工作。"},{q: "It ___ (rain) last night.", a: "rained", t: "昨晚下雨了。"},
+                {q: "You ___ (not call) me.", a: "did not call", t: "你沒打給我。"},{q: "They ___ (arrive) late.", a: "arived", t: "他們遲到了。"},
+                {q: "I ___ (write) a letter.", a: "wrote", t: "我寫了一封信。"},{q: "She ___ (not stay) long.", a: "did not stay", t: "她沒待很久。"}
+            ]
         },
         futureSimple: {
-            title: "Future Simple 未來簡單式", usage: "Future plans.",
-            table: `<table class="rule-table"><tr><th>All Subjects</th><td>will + V1</td></tr><tr><th>Negative</th><td>will not + V1</td></tr></table>`,
-            contractions: ["will not → won't", "I will → I'll"],
-            questions: [{q: "I ___ (help) you.", a: "will help", t: "我會幫你。"}, {q: "They ___ (not come).", a: "will not come", t: "他們不會來。"}, {q: "She ___ (travel) soon.", a: "will travel", t: "她會去旅行。"}, {q: "We ___ (not forget) it.", a: "will not forget", t: "我們不會忘。"}, {q: "He ___ (buy) a car.", a: "will buy", t: "他會買車。"}, {q: "It ___ (be) cold.", a: "will be", t: "會變冷。"}, {q: "You ___ (love) this.", a: "will love", t: "你會喜歡。"}, {q: "I ___ (not watch) TV.", a: "will not watch", t: "我不會看。"}, {q: "They ___ (win).", a: "will win", t: "他們會贏。"}, {q: "She ___ (not call).", a: "will not call", t: "她不會打。"}]
+            title: "Future Simple 未來簡單式",
+            usage: "Future plans and predictions. (未來的計畫、預測。)",
+            table: `<table class="rule-table"><tr><th>All Subjects</th><td>will + V1</td></tr></table>`,
+            contractions: ["will not → won't"],
+            questions: [
+                {q: "I ___ (help) you tomorrow.", a: "will help", t: "我明天會幫你。"},{q: "They ___ (not come) tonight.", a: "will not come", t: "他們今晚不會來。"},
+                {q: "She ___ (travel) to Japan.", a: "will travel", t: "她會去日本旅行。"},{q: "We ___ (not forget) you.", a: "will not forget", t: "我們不會忘記你。"},
+                {q: "He ___ (buy) a house.", a: "will buy", t: "他會買房子。"},{q: "It ___ (be) sunny.", a: "will be", t: "天氣會晴朗。"},
+                {q: "You ___ (win) the race.", a: "will win", t: "你會贏得比賽。"},{q: "I ___ (not watch) the game.", a: "will not watch", t: "我不會看比賽。"},
+                {q: "They ___ (bring) some food.", a: "will bring", t: "他們會帶食物。"},{q: "She ___ (not tell) the secret.", a: "will not tell", t: "她不會說出秘密。"}
+            ]
         },
         presentContinuous: {
-            title: "Present Continuous 現在進行式", usage: "Now.",
-            table: `<table class="rule-table"><tr><th>I</th><td>am + ing</td></tr><tr><th>He/She/It</th><td>is + ing</td></tr><tr><th>You/We/They</th><td>are + ing</td></tr></table>`,
+            title: "Present Continuous 現在進行式",
+            usage: "Actions happening right now. (現在正在進行。)",
+            table: `<table class="rule-table"><tr><th>I am / He is / They are</th><td>Verb + ing</td></tr></table>`,
             contractions: ["is not → isn't", "are not → aren't"],
-            questions: [{q: "I ___ (read) now.", a: "am reading", t: "正在讀。"}, {q: "They ___ (not dance).", a: "are not dancing", t: "沒跳舞。"}, {q: "She ___ (cook) now.", a: "is cooking", t: "正在煮。"}, {q: "We ___ (not watch) TV.", a: "are not watching", t: "沒在看。"}, {q: "You ___ (listen) to me.", a: "are listening", t: "在聽我說。"}, {q: "He ___ (not work).", a: "is not working", t: "沒工作。"}, {q: "Dog ___ (bark).", a: "is barking", t: "狗在叫。"}, {q: "I ___ (not cry).", a: "am not crying", t: "我沒哭。"}, {q: "They ___ (play) now.", a: "are playing", t: "在玩。"}, {q: "It ___ (get) dark.", a: "is getting", t: "天黑了。"}]
+            questions: [
+                {q: "I ___ (read) now.", a: "am reading", t: "我現在正在看書。"},{q: "They ___ (not study).", a: "are not studying", t: "他們沒在讀書。"},
+                {q: "She ___ (cook) dinner.", a: "is cooking", t: "她正在煮晚餐。"},{q: "We ___ (not watch) TV.", a: "are not watching", t: "我們沒在看電視。"},
+                {q: "He ___ (play) piano.", a: "is playing", t: "他正在彈鋼琴。"},{q: "You ___ (listen) to me.", a: "are listening", t: "你正在聽我說話。"},
+                {q: "The dog ___ (bark).", a: "is barking", t: "狗正在叫。"},{q: "It ___ (rain) outside.", a: "is raining", t: "外面正在下雨。"},
+                {q: "I ___ (not sleep) yet.", a: "am not sleeping", t: "我還沒在睡覺。"},{q: "They ___ (run) fast.", a: "are running", t: "他們正在跑。"}
+            ]
         },
         pastContinuous: {
-            title: "Past Continuous 過去進行式", usage: "Was happening.",
-            table: `<table class="rule-table"><tr><th>I/He/She/It</th><td>was + ing</td></tr><tr><th>You/We/They</th><td>were + ing</td></tr></table>`,
+            title: "Past Continuous 過去進行式",
+            usage: "Actions happening at a past time. (過去某時正在進行。)",
+            table: `<table class="rule-table"><tr><th>I was / They were</th><td>Verb + ing</td></tr></table>`,
             contractions: ["was not → wasn't", "were not → weren't"],
-            questions: [{q: "I ___ (eat) at 7.", a: "was eating", t: "七點時在吃。"}, {q: "They ___ (not study).", a: "were not studying", t: "沒讀書。"}, {q: "She ___ (sleep).", a: "was sleeping", t: "在睡覺。"}, {q: "We ___ (walk).", a: "were walking", t: "在走路。"}, {q: "He ___ (not drive).", a: "was not driving", t: "沒開車。"}, {q: "You ___ (sing).", a: "were singing", t: "在唱歌。"}, {q: "It ___ (snow).", a: "was snowing", t: "在下雪。"}, {q: "I ___ (not look).", a: "was not looking", t: "沒在看。"}, {q: "They ___ (work).", a: "were working", t: "在工作。"}, {q: "He ___ (wear) a hat.", a: "was wearing", t: "戴著帽子。"}]
+            questions: [
+                {q: "I ___ (eat) at 7 PM.", a: "was eating", t: "我七點在吃飯。"},{q: "They ___ (not study).", a: "were not studying", t: "他們當時沒在讀書。"},
+                {q: "She ___ (sleep) then.", a: "was sleeping", t: "她那時在睡覺。"},{q: "We ___ (walking) home.", a: "were walking", t: "我們當時在走路回家。"},
+                {q: "He ___ (not drive).", a: "was not driving", t: "他那時沒在開車。"},{q: "You ___ (sing) well.", a: "were singing", t: "你那時唱得很好。"},
+                {q: "It ___ (snow) yesterday.", a: "was snowing", t: "昨天當時正在下雪。"},{q: "I ___ (not looking).", a: "was not looking", t: "我當時沒在看。"},
+                {q: "They ___ (work) hard.", a: "were working", t: "他們當時在努力工作。"},{q: "She ___ (wearing) a hat.", a: "was wearing", t: "她那時戴著帽子。"}
+            ]
         },
         futureContinuous: {
-            title: "Future Continuous 未來進行式", usage: "Will be happening.",
+            title: "Future Continuous 未來進行式",
+            usage: "Actions happening in the future. (未來某時將在進行。)",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>will be + ing</td></tr></table>`,
             contractions: ["will not be → won't be"],
-            questions: [{q: "I ___ (wait) for you.", a: "will be waiting", t: "會在那等你。"}, {q: "They ___ (not work).", a: "will not be working", t: "不會在工作。"}, {q: "She ___ (fly) tonight.", a: "will be flying", t: "在飛。"}, {q: "We ___ (have) lunch.", a: "will be having", t: "在吃午餐。"}, {q: "He ___ (not sleep).", a: "will not be sleeping", t: "沒睡覺。"}, {q: "You ___ (study).", a: "will be studying", t: "在讀書。"}, {q: "It ___ (rain) later.", a: "will be raining", t: "在下雨。"}, {q: "I ___ (not using) it.", a: "will not be using", t: "沒在用。"}, {q: "They ___ (swim).", a: "will be swimming", t: "在游泳。"}, {q: "She ___ (wear) red.", a: "will be wearing", t: "穿紅色。"}]
+            questions: [
+                {q: "I ___ (wait) for you.", a: "will be waiting", t: "我到時會在那等你。"},{q: "They ___ (not work).", a: "will not be working", t: "他們到時不會在工作。"},
+                {q: "She ___ (flying) now.", a: "will be flying", t: "她那時將在飛行。"},{q: "We ___ (having) lunch.", a: "will be having", t: "我們那時將在吃午餐。"},
+                {q: "He ___ (not sleep).", a: "will not be sleeping", t: "他到時將不會在睡覺。"},{q: "You ___ (study) all day.", a: "will be studying", t: "你那時將讀一整天書。"},
+                {q: "It ___ (rain) later.", a: "will be raining", t: "晚點將會下雨。"},{q: "I ___ (not using) it.", a: "will not be using", t: "我到時不會使用它。"},
+                {q: "They ___ (swim) soon.", a: "will be swimming", t: "他們很快將在游泳。"},{q: "She ___ (wear) red.", a: "will be wearing", t: "她那時將穿紅色。"}
+            ]
         },
         presentPerfect: {
-            title: "Present Perfect 現在完成式", usage: "Up to now.",
-            table: `<table class="rule-table"><tr><th>I/You/We/They</th><td>have + V3</td></tr><tr><th>He/She/It</th><td>has + V3</td></tr></table>`,
+            title: "Present Perfect 現在完成式",
+            usage: "Experience or ongoing actions. (經驗、持續到現在的動作。)",
+            table: `<table class="rule-table"><tr><th>I have / He has</th><td>V3 (Past Participle)</td></tr></table>`,
             contractions: ["have not → haven't", "has not → hasn't"],
-            questions: [{q: "I ___ (see) it.", a: "have seen", t: "看過了。"}, {q: "She ___ (not finish).", a: "has not finished", t: "沒完成。"}, {q: "They ___ (live) here.", a: "have lived", t: "住這。"}, {q: "He ___ (lose) keys.", a: "has lost", t: "丟鑰匙。"}, {q: "We ___ (not meet).", a: "have not met", t: "沒見過。"}, {q: "You ___ (grow).", a: "have grown", t: "長高。"}, {q: "Cat ___ (eat).", a: "has eaten", t: "吃了。"}, {q: "I ___ (not visit).", a: "have not visited", t: "沒去過。"}, {q: "It ___ (stop) raining.", a: "has stopped", t: "雨停。"}, {q: "They ___ (buy) a car.", a: "have bought", t: "買車。"}]
+            questions: [
+                {q: "I ___ (see) Paris.", a: "have seen", t: "我去過巴黎。"},{q: "She ___ (not finish).", a: "has not finished", t: "她還沒寫完。"},
+                {q: "They ___ (live) here.", a: "have lived", t: "他們住在這。"},{q: "He ___ (lose) his key.", a: "has lost", t: "他丟了鑰匙。"},
+                {q: "We ___ (not meet) him.", a: "have not met", t: "我們沒見過他。"},{q: "You ___ (grown) taller.", a: "have grown", t: "你長高了。"},
+                {q: "Cat ___ (eat) its food.", a: "has eaten", t: "貓吃完飯了。"},{q: "I ___ (not visit) him.", a: "have not visited", t: "我沒去拜訪他。"},
+                {q: "It ___ (stop) raining.", a: "has stopped", t: "雨停了。"},{q: "They ___ (buy) a house.", a: "have bought", t: "他們買了房。"}
+            ]
         },
         pastPerfect: {
-            title: "Past Perfect 過去完成式", usage: "Before then.",
+            title: "Past Perfect 過去完成式",
+            usage: "Action before another past action. (過去某事之前已完成。)",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>had + V3</td></tr></table>`,
             contractions: ["had not → hadn't"],
-            questions: [{q: "Train ___ (leave).", a: "had left", t: "火車開了。"}, {q: "She ___ (not eat).", a: "had not eaten", t: "沒吃。"}, {q: "I ___ (study) hard.", a: "had studied", t: "學過。"}, {q: "They ___ (finish) lunch.", a: "had finished", t: "吃完午餐。"}, {q: "He ___ (not see) me.", a: "had not seen", t: "沒看見。"}, {q: "We ___ (clean) it.", a: "had cleaned", t: "打掃了。"}, {q: "Film ___ (start).", a: "had started", t: "開始了。"}, {q: "You ___ (not call).", a: "had not called", t: "沒打來。"}, {q: "I ___ (lose) it.", a: "had lost", t: "丟了。"}, {q: "They ___ (prepare).", a: "had prepared", t: "準備了。"}]
+            questions: [
+                {q: "I ___ (eat) already.", a: "had eaten", t: "我那時已經吃過了。"},{q: "She ___ (not arrive).", a: "had not arrived", t: "她那時還沒到。"},
+                {q: "They ___ (left) earlier.", a: "had left", t: "他們早在那之前離開了。"},{q: "He ___ (lost) his way.", a: "had lost", t: "他那時迷路了。"},
+                {q: "We ___ (finished) work.", a: "had finished", t: "我們在那之前已完工。"},{q: "It ___ (started) raining.", a: "had started", t: "雨在那之前已開始下。"},
+                {q: "You ___ (not seen) it.", a: "had not seen", t: "你那時還沒看過。"},{q: "I ___ (written) the test.", a: "had written", t: "我那時已寫完測驗。"},
+                {q: "They ___ (bought) it.", a: "had bought", t: "他們在那之前買了它。"},{q: "She ___ (told) me.", a: "had told", t: "她早在那之前就告訴我。"}
+            ]
         },
         futurePerfect: {
-            title: "Future Perfect 未來完成式", usage: "Done by then.",
+            title: "Future Perfect 未來完成式",
+            usage: "Action finished by a future time. (未來某時之前將完工。)",
             table: `<table class="rule-table"><tr><th>All Subjects</th><td>will have + V3</td></tr></table>`,
             contractions: ["will not have → won't have"],
-            questions: [{q: "I ___ (finish) by 5.", a: "will have finished", t: "五點前會完成。"}, {q: "She ___ (not arrive).", a: "will not have arrived", t: "沒抵達。"}, {q: "They ___ (leave) soon.", a: "will have left", t: "離開了。"}, {q: "We ___ (save) money.", a: "will have saved", t: "存錢了。"}, {q: "He ___ (not graduate).", a: "will not have graduated", t: "沒畢業。"}, {q: "I ___ (buy) a house.", a: "will have bought", t: "買房。"}, {q: "Sun ___ (set) by 8.", a: "will have set", t: "日落。"}, {q: "You ___ (read) it all.", a: "will have read", t: "讀完。"}, {q: "They ___ (not build) it.", a: "will not have built", t: "沒蓋。"}, {q: "Winter ___ (end).", a: "will have ended", t: "冬天結束。"}]
+            questions: [
+                {q: "I ___ (finish) by 5 PM.", a: "will have finished", t: "五點前我將已完工。"},{q: "She ___ (not arrive).", a: "will not have arrived", t: "她到時還不會到。"},
+                {q: "They ___ (left) soon.", a: "will have left", t: "他們很快就會離開了。"},{q: "We ___ (saved) money.", a: "will have saved", t: "到時我們將已存好錢。"},
+                {q: "He ___ (graduated).", a: "will have graduated", t: "到時他將已畢業。"},{q: "I ___ (bought) a house.", a: "will have bought", t: "到時我將已買好房。"},
+                {q: "Sun ___ (set) by 7 PM.", a: "will have set", t: "太陽七點前將下山。"},{q: "You ___ (read) it all.", a: "will have read", t: "到時你將已讀完。"},
+                {q: "They ___ (not built) it.", a: "will not have built", t: "他們到時還不會蓋好。"},{q: "Winter ___ (ended).", a: "will have ended", t: "三月前冬天將已結束。"}
+            ]
         }
     };
 
     function clean(text) {
         if (!text) return "";
         return text.toLowerCase().trim()
-            .replace(/[‘’“”]/g, "'")
-            .replace(/won't/g, "will not").replace(/haven't/g, "have not")
-            .replace(/hasn't/g, "has not").replace(/hadn't/g, "had not")
+            .replace(/[‘’“”]/g, "'").replace(/won't/g, "will not")
+            .replace(/haven't/g, "have not").replace(/hasn't/g, "has not")
             .replace(/isn't/g, "is not").replace(/aren't/g, "are not")
-            .replace(/n't/g, " not").replace(/'ll/g, " will")
+            .replace(/wasn't/g, "was not").replace(/weren't/g, "were not")
+            .replace(/don't/g, "do not").replace(/doesn't/g, "does not")
+            .replace(/hadn't/g, "had not").replace(/'ve/g, " have")
+            .replace(/'s/g, " is").replace(/'ll/g, " will")
             .replace(/[.,!?;:]/g, "").replace(/\s+/g, " ");
     }
 
     function goToMenu() {
-        let nameInput = document.getElementById('student-name').value.trim();
-        if (!nameInput) return;
-        studentName = nameInput;
+        studentName = document.getElementById('student-name').value.trim();
+        if (!studentName) return alert("Enter name!");
         document.getElementById('login-card').style.display = 'none';
         document.getElementById('menu-card').style.display = 'block';
         document.getElementById('global-nav').style.display = 'flex';
@@ -168,25 +234,38 @@
         let grid = document.getElementById('menu-buttons');
         grid.innerHTML = "";
         Object.keys(data).forEach(key => {
-            grid.innerHTML += `<button class="lesson-btn" onclick="loadTense('${key}')">${data[key].title.split(' ')[0]} ${data[key].title.split(' ')[1]}</button>`;
+            const parts = data[key].title.split(' ');
+            const zh = parts.pop();
+            const en = parts.join(' ');
+            grid.innerHTML += `<button class="lesson-btn" onclick="loadTense('${key}')">
+                <span class="btn-en">${en}</span><span class="btn-zh">${zh}</span>
+            </button>`;
         });
     }
 
     function loadTense(key) {
         currentTense = key;
-        let t = data[key];
-        document.getElementById('rule-content').innerHTML = `<h2>${t.title}</h2><p>${t.usage}</p>${t.table}`;
+        const t = data[key];
+        document.getElementById('rule-content').innerHTML = `
+            <h2 style="color:var(--primary);">${t.title}</h2>
+            <p style="background:#fdfae3; border-left:5px solid #f1c40f; padding:15px;"><strong>When to use (用法説明):</strong><br>${t.usage}</p>
+            ${t.table}
+            <div class="help-btn" onclick="toggleModal(true)">View Contractions & V3 Help (查看縮寫與分詞表)</div>
+        `;
         document.getElementById('menu-card').style.display = 'none';
         document.getElementById('rule-card').style.display = 'block';
     }
 
     function toggleModal(show) {
         if (show) {
-            let t = data[currentTense];
-            let list = t.contractions.map(c => `<li>${c}</li>`).join('');
-            document.getElementById('modal-body').innerHTML = `<h3>${t.title}</h3>${t.table}<div style="background:#e8f0fe;padding:15px;margin-top:10px;"><b>Contractions:</b><ul>${list}</ul></div>`;
+            const t = data[currentTense];
+            document.getElementById('modal-body').innerHTML = `
+                <h3>${t.title} Rules</h3>
+                ${t.table}
+                <p><strong>Common Contractions:</strong> ${t.contractions.join(', ')}</p>
+                ${v3Table}`;
             document.getElementById('rules-modal').style.display = 'block';
-        } else { document.getElementById('rules-modal').style.display = 'none'; }
+        } else document.getElementById('rules-modal').style.display = 'none';
     }
 
     function startQuiz() {
@@ -197,101 +276,47 @@
     }
 
     function showQuestion() {
-        let q = data[currentTense].questions[currentIdx];
+        const q = data[currentTense].questions[currentIdx];
         document.getElementById('current-tense-display').innerText = data[currentTense].title;
-        document.getElementById('prev-btn').style.visibility = (currentIdx > 0) ? 'visible' : 'hidden';
         document.getElementById('question-area').innerHTML = `
-            <div style="display:flex; justify-content:space-between;"><span>${currentIdx+1}/10</span><span onclick="toggleModal(true)" style="color:var(--primary);cursor:pointer;">📖 Rules</span></div>
-            <h3>${q.q}</h3><p>${q.t}</p>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>Question ${currentIdx+1}/10</span>
+                <span class="help-btn" onclick="toggleModal(true)">View Rules & V3 Help</span>
+            </div>
+            <h3 style="margin-top:0;">${q.q}</h3>
+            <p style="color:#666;">${q.t}</p>
             <input type="text" id="ans-input" autocomplete="off" onkeypress="if(event.key==='Enter') next()">
-            <button onclick="next()" style="width:100%;padding:15px;background:var(--primary);color:white;border:none;border-radius:8px;">Next</button>`;
-        if (userAnswers[currentIdx]) document.getElementById('ans-input').value = userAnswers[currentIdx].user;
+            <button style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer;" onclick="next()">Next Question | 下一題</button>
+        `;
         document.getElementById('ans-input').focus();
     }
 
     function next() {
-        let val = document.getElementById('ans-input').value;
-        let correct = data[currentTense].questions[currentIdx].a;
-        userAnswers[currentIdx] = { q: data[currentTense].questions[currentIdx].q, user: val, correct: correct, isCorrect: clean(val) === clean(correct) };
+        const userVal = document.getElementById('ans-input').value;
+        const correctVal = data[currentTense].questions[currentIdx].a;
+        userAnswers[currentIdx] = { q: data[currentTense].questions[currentIdx].q, user: userVal, correct: correctVal, isCorrect: clean(userVal) === clean(correctVal) };
         currentIdx++;
         if (currentIdx < 10) showQuestion(); else showResults();
     }
 
-    function prevQuestion() { if (currentIdx > 0) { currentIdx--; showQuestion(); } }
-
     function showResults() {
-        let score = userAnswers.filter(a => a.isCorrect).length;
+        const score = userAnswers.filter(a => a.isCorrect).length;
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('results-container').style.display = 'block';
-        document.getElementById('score-summary').innerHTML = `<h3>${studentName}</h3><h1>${score*10}%</h1>`;
-        let rev = ""; userAnswers.forEach(a => { rev += `<div class="review-item"><b>${a.q}</b><br>Yours: <span class="${a.isCorrect?'correct-ans':'wrong-ans'}">${a.user||"None"}</span> | Ans: ${a.correct}</div>`; });
+        document.getElementById('score-summary').innerHTML = `<h1>${score*10}%</h1><p>${studentName} - ${data[currentTense].title}</p>`;
+        let rev = ""; userAnswers.forEach(a => {
+            rev += `<div class="review-item"><b>${a.q}</b><br><span style="color:${a.isCorrect?'green':'red'}">${a.user || "Empty"}</span> ${a.isCorrect?'':`| Correct: ${a.correct}`}</div>`;
+        });
         document.getElementById('review-list').innerHTML = rev;
     }
 
-    function backToHome() {
-        document.querySelectorAll('.card').forEach(c => c.style.display='none');
-        document.getElementById('menu-card').style.display='block';
-    }
-
-async function saveAsPDF() {
-    const { jsPDF } = window.jspdf;
-    const captureElement = document.getElementById('capture-area');
-    
-    // Feedback to user
-    const btn = event.target;
-    btn.innerText = "Downloading PDF...";
-
-    try {
-        const canvas = await html2canvas(captureElement, {
-            scale: 2, // Double resolution for crisp text
-            useCORS: true,
-            backgroundColor: "#ffffff"
-        });
-
-        const imgData = canvas.toDataURL('image/png');
+    async function saveAsPDF() {
+        const { jsPDF } = window.jspdf;
+        const canvas = await html2canvas(document.getElementById('capture-area'), { scale: 2 });
         const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        // Calculate dimensions to fit A4 paper
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-        
-        // Triggers the standard browser "Save As" or direct download
-        pdf.save(`${studentName}_English_Test.pdf`);
-        
-        btn.innerText = "📄 Save Result to Computer";
-    } catch (err) {
-        console.error(err);
-        alert("Error generating PDF. Please check your browser settings.");
-        btn.innerText = "📄 Save Result to Computer";
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 10, 210, (canvas.height * 210) / canvas.width);
+        pdf.save(`${studentName}_English_Result.pdf`);
     }
-}
-    function toggleModal(show) {
-    if (show) {
-        const t = data[currentTense];
-        // The "Usage" now includes the Chinese translation from your data object
-        const cList = t.contractions.map(c => `<li>${c}</li>`).join('');
-        
-        document.getElementById('modal-body').innerHTML = `
-            <h2 style="color: var(--primary); margin-top:0;">${t.title}</h2>
-            <p style="font-size: 1.1rem; border-left: 4px solid var(--primary); padding-left: 10px;">
-                <strong>Usage:</strong> ${t.usage}
-            </p>
-            ${t.table}
-            <div style="background:#f0f7ff; padding:15px; border-radius:10px; border: 1px solid #d0e3ff; margin-top:15px;">
-                <strong style="color: #0056b3;">Allowed Contractions:</strong>
-                <ul style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr;">
-                    ${cList}
-                </ul>
-            </div>
-        `;
-        document.getElementById('rules-modal').style.display = 'block';
-    } else {
-        document.getElementById('rules-modal').style.display = 'none';
-    }
-}
 </script>
 </body>
 </html>
