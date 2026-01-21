@@ -210,17 +210,27 @@
         }
     };
 
-    function clean(text) {
+function clean(text) {
         if (!text) return "";
         return text.toLowerCase().trim()
-            .replace(/[‘’“”]/g, "'").replace(/won't/g, "will not")
-            .replace(/haven't/g, "have not").replace(/hasn't/g, "has not")
-            .replace(/isn't/g, "is not").replace(/aren't/g, "are not")
-            .replace(/wasn't/g, "was not").replace(/weren't/g, "were not")
-            .replace(/don't/g, "do not").replace(/doesn't/g, "does not")
-            .replace(/hadn't/g, "had not").replace(/'ve/g, " have")
-            .replace(/'s/g, " is").replace(/'ll/g, " will")
-            .replace(/[.,!?;:]/g, "").replace(/\s+/g, " ");
+            .replace(/[‘’“”]/g, "'") // Standardize curly quotes
+            // Negative Contractions
+            .replace(/won't/g, "will not")
+            .replace(/can't/g, "cannot")
+            .replace(/shan't/g, "shall not")
+            .replace(/n't/g, " not")
+            // Auxiliary Contractions
+            .replace(/'ve/g, " have")
+            .replace(/'re/g, " are")
+            .replace(/'ll/g, " will")
+            .replace(/'d/g, " would") // Also covers 'had' contextually
+            .replace(/'m/g, " am")
+            // Special case for 's (can be "is" or "has")
+            // In these tenses, expanding 's to 'is' is safe for comparison
+            .replace(/'s/g, " is")
+            // Remove punctuation and extra spaces
+            .replace(/[.,!?;:]/g, "")
+            .replace(/\s+/g, " ");
     }
 
     function goToMenu() {
